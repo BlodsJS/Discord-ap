@@ -7,6 +7,8 @@ import discord
 from discord.ext import commands
 from config import Config
 from cogs import setup as setup_cogs
+import os
+print("Diretório atual:", os.getcwd())
 
 # Configuração básica de logging
 logging.basicConfig(
@@ -39,6 +41,7 @@ class Bot(commands.Bot):
         """Initialize extensions and background tasks"""
         await self.load_essentials()
         await setup_cogs(self)
+        await self.tree.sync()
         logger.info(f'Carregado {len(self.cogs)} cogs e {len(self.commands)} comandos')
 
     async def load_essentials(self) -> None:
