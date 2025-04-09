@@ -7,7 +7,8 @@ class AdminCommands(BaseCommands):
     @commands.command(name="addxp")
     @commands.has_permissions(administrator=True)
     async def addxp_prefix(self, ctx, user: Member, xp: int):
-        await self.level_sys.add_xp(user.id, xp)
+        user_id= str(user.id)
+        await self.level_sys.handle_xp_increase(user_id, xp)
         await ctx.send(f"✅ {xp} XP adicionados para {user.mention}")
 
     @app_commands.command(name="addxp", description="Adiciona XP a um usuário")

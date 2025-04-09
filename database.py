@@ -27,13 +27,17 @@ class DatabaseManager:
             self._initialized = True
             logger.info("DatabaseManager inicializado")
     async def connect(self) -> None:
-        """Estabelece conexão com o banco de dados"""
-        async with self.lock:
-        	
-	        if not self.connection or self.connection.close:
-	            self.connection = await aiosqlite.connect(self.db_path)
-	            await self._create_tables()
-	            logger.info("Conexão com o banco estabelecida")
+    	"""Estabelece conexão com o banco de dados"""
+    	async with self.lock:
+    	   # Verifica se a conexão está fechada ou não existe
+    	   if self.connection is None or not self.connection.is_alive:
+    	           if self.connection is not None:
+    	           	await self.connection.close()
+    	           self.connection = await aiosqlite.connect(self.db_path)
+    	           await self._create_tables()
+    	           logger.info("Conexão com o banco estabelecida")
+            
+            
 
     async def _create_tables(self):
         async with self.connection.execute('''
@@ -48,20 +52,17 @@ class DatabaseManager:
             await self.connection.commit()
 
     async def _execute_query(self, query: str, params: tuple = ()) -> Optional[Dict[str, Any]]:
-        await self.connect()
-        async with self.lock:
-            if not self.connection or await self.connection.close():
-                await self._initialize()
-            
-            try:
-                async with self.connection.execute(query, params) as cursor:
-                    await self.connection.commit()
-                    if query.strip().upper().startswith('SELECT'):
-                        return await cursor.fetchone()
-                    return None
-            except aiosqlite.Error as e:
-                logger.error(f"Erro na query: {query} | Params: {params} | Erro: {e}")
-                raise
+    	await self.connect()  # Garante que a conexão está ativa
+    	async with self.lock:
+    	       try:
+    	           async with self.connection.execute(query, params) as cursor:
+    	           	await self.connection.commit()
+    	           	if query.strip().upper().startswith('SELECT'):
+    	           		return await cursor.fetchone()
+    	           	return None
+    	       except aiosqlite.Error as e:
+    	       	logger.error(f"Erro na query: {query} | Params: {params} | Erro: {e}")
+    	       	raise
 
     # Método genérico seguro para atualizações
     async def update_field(self, user_id: str, field: str, value: Any) -> bool:
@@ -82,6 +83,8 @@ class DatabaseManager:
             logger.error(f"Falha ao atualizar {field} para {user_id}: {e}")
             return False
 
+
+    
     # Métodos específicos para melhor legibilidade
     async def increment_xp(self, user_id: str, amount: int) -> bool:
         await self.connect()
@@ -132,11 +135,47 @@ class DatabaseManager:
             "SELECT xp, level, message, voice FROM xp_data WHERE user_id = ?",
             (user_id,)
         ) as cursor:
+            
             row = await cursor.fetchone()
-        print(row)
-        return row
-
-
+            if row:
+            	print(row)
+            	user_data= {
+            		"xp": row[0],
+            		"level": row[1],
+            		"message": row[2],
+            		"voice": row[3]
+            	}
+            	return user_data
+            else:
+            	async with self.connection.execute(
+            		"INSERT INTO xp_data (user_id, xp, level, message, voice) VALUES (?, ?, ?, ?, ?)",
+            		(user_id, 0, 1, 0, 0)
+            	) as cursor:
+            		
+	            	await self.connection.commit()
+	            	return {
+	            		"xp": 0,
+	            		"level": 1,
+	            		"message": 0,
+	            		"voice": 0
+	            	}
+	            	
+    async def get_user_rank(self, user_id: str) -> int:
+    	# Primeiro, obtenha os dados do usuário
+    	user_data = await self.get_user_data(user_id)
+    	user_level = user_data["level"]
+    	user_xp = user_data["xp"]
+    	query = """
+	    	SELECT COUNT(*) + 1 as rank
+	    	FROM xp_data
+	    	WHERE level > ?
+	    		OR (level = ? AND xp > ?)
+    	"""
+    	async with self.connection.execute(query, (user_level, user_level, user_xp)) as cursor:
+    	   row = await cursor.fetchone()
+    	   return row[0] if row else 1
+        
+        
     async def close(self):
         async with self.lock:
             if self.connection and not await self.connection.close():

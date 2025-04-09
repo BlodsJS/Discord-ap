@@ -51,6 +51,7 @@ class LevelSystem:
         await self.db.increment_xp(user_id, xp_earned)
         return xp_earned
 
+
     async def create_level_up_message(self, member: Member, new_level: int) -> str:
         base_message = self.level_messages.get(new_level, 
             f"Parabéns {member.mention}, você alcançou o nível {new_level}!"
@@ -59,6 +60,11 @@ class LevelSystem:
         if new_level in [25, 50, 100]:
             return f"🌟 {base_message}"
         return base_message
+        
+    async def get_rank(self, user_id:str) -> int:
+    	rank = await self.db.get_user_rank(user_id)
+    	return rank
+    	
     async def get_data(self, user_id: str):
     	user_data = await self.db.get_user_data(user_id)
     	return user_data
