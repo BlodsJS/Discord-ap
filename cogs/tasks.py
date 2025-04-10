@@ -1,5 +1,8 @@
 from discord.ext import tasks
 from utils.level_system import LevelSystem
+import logging
+
+logger = logging.getLogger(__name__)
 
 class BackgroundTasks(commands.Cog):
     def __init__(self, bot):
