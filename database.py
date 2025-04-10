@@ -4,6 +4,7 @@ import logging
 from typing import Optional, Dict, Any, AsyncContextManager
 import cachetools
 import asyncio
+import discord
 
 logger = logging.getLogger(__name__)
 
@@ -93,6 +94,27 @@ class DatabaseManager:
             (amount, user_id)
         )
 
+    async def increment_level(self, user_id: str, amount: int) -> bool:
+        await self.connect()
+        return await self._execute_query(
+            "UPDATE xp_data SET level = level + ? WHERE user_id = ?",
+            (amount, user_id)
+        )
+        
+    async def retirar_xp(self, user_id: str, amount: int) -> bool:
+        await self.connect()
+        return await self._execute_query(
+            "UPDATE xp_data SET xp = xp - ? WHERE user_id = ?",
+            (amount, user_id)
+        )
+        
+    async def retirar_level(self, user_id: str, amount: int) -> bool:
+        await self.connect()
+        return await self._execute_query(
+            "UPDATE xp_data SET level = level - ? WHERE user_id = ?",
+            (amount, user_id)
+        )
+        
     async def increment_message_count(self, user_id: str) -> bool:
         await self.connect()
         return await self._execute_query(
@@ -138,7 +160,6 @@ class DatabaseManager:
             
             row = await cursor.fetchone()
             if row:
-            	print(row)
             	user_data= {
             		"xp": row[0],
             		"level": row[1],
@@ -176,6 +197,64 @@ class DatabaseManager:
     	   return row[0] if row else 1
         
         
+    async def top_users(self, offset: int = 0):
+    	await self.connect()
+    	try:
+	        # Consulta assíncrona ao banco de dados
+	        async with self.connection.execute('''
+	            SELECT user_id, xp, level, message, voice
+	            FROM xp_data 
+	            ORDER BY level DESC, xp DESC
+	            LIMIT 5 OFFSET ?
+	            ''', (offset,)) as cursor:
+	            
+	            top_server = await cursor.fetchall()
+	        
+	        
+	
+	        if not top_server:
+	            return discord.File(Editor(Canvas((580, 200), color="#131515")).image_bytes, "leaderboard.png")
+	        return top_server
+	    
+    	except Exception as e:
+	        logging.error(f"Erro ao gerar ranking: {e}")
+	        return discord.File(Editor(Canvas((580, 200), color="#131515")).image_bytes, "leaderboard.png")
+	        
+    async def reset_xp(self):
+    	await self.connect()
+    	
+    	query = """
+	        UPDATE xp_data 
+	        SET 
+	            xp = 0,
+	            level = 1
+	    """
+    	try:
+            async with self.connection.execute(query) as cursor:
+                 await self.connection.commit()
+                 return cursor.rowcount  # Retorna quantos usuários foram resetados
+    	except Exception as e:
+            logger.error(f"Erro ao resetar usuários: {e}")
+            return 0
+	        
+    async def reset_user(self, user_id: str):
+    	await self.connect()
+    	query = """
+	        UPDATE xp_data 
+	        SET 
+	            xp = 0,
+	            level = 1
+	        WHERE user_id = ?
+	    """
+    	try:
+    	    
+	        async with self.connection.execute(query, (user_id,)) as cursor:
+	            await self.connection.commit()
+	            return "Usuario resetado"  # Retorna quantos usuários foram resetados
+    	except Exception as e:
+	        logger.error(f"Erro ao resetar usuário: {e}")
+	        return 0
+	    
     async def close(self):
         async with self.lock:
             if self.connection and not await self.connection.close():

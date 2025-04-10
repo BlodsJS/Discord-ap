@@ -2,9 +2,13 @@ from . import BaseCommands
 import discord
 from discord.ext import commands
 from discord import app_commands, Member
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ProfileCommands(BaseCommands):
-    @commands.command(name="profile")
+    
+    @commands.command(name="profile", aliases=["perfil"])
     async def profile_prefix(self, ctx, user: Member = None):
         user = user or ctx.author
         user_data = await self.level_sys.get_data(user.id)
@@ -26,7 +30,7 @@ class ProfileCommands(BaseCommands):
         image = await self.processor.create_profile_card(user, user_data["xp"], user_data["level"], house, rank)
         await interaction.response.send_message(file=image)
         
-    @commands.command(name="rank")
+    @commands.command(name="rank", aliases=["xp"])
     async def rank_prefix(self, ctx, user: Member = None):
         user = user or ctx.author
         user_data = await self.level_sys.get_data(user.id)
@@ -42,10 +46,9 @@ class ProfileCommands(BaseCommands):
         user_data = await self.level_sys.get_data(user.id)
         user_id = str(user.id)
         rank = await self.level_sys.get_rank(user_id)
-        print(rank, "rank do usuario")
         image = await self.processor.create_xp_card(user, user_data["xp"], user_data["level"], rank)
         await interaction.response.send_message(file=image)
-    
+        
     @commands.command(name="top")
     async def top_prefix(self, ctx, user: Member = None):
         user = user or ctx.author
@@ -54,9 +57,10 @@ class ProfileCommands(BaseCommands):
     		description="Ainda em desenvolvimento",
     		color=discord.Color.default()
         )
+        users = await self.db.top_users()
+        image = await self.processor.create_leaderboard(users, ctx.guild)
         embed.set_footer(text=f"Requisitado por {ctx.author.name}", icon_url=ctx.author.avatar.url)
-        await ctx.send(embed=embed)
-        
+        await ctx.send(file = image)
     #barra
     @app_commands.command(name="top", description="Exibe o top do servidor")
     async def top_slash(self, interaction, user: Member = None):
@@ -75,7 +79,8 @@ class ProfileCommands(BaseCommands):
     async def stats_prefix(self, ctx, user: Member = None):
         user = user or ctx.author
         user_data = await self.level_sys.get_data(user.id)
-        next= (user_data["level"] ** 2) * 100
+        taxa = await self.use.obter_taxa(self.processor.inicios, self.processor.fins, self.processor.valores, user_data["level"])
+        next= (user_data["level"] ** 2) * taxa +100
         minutes = int(user_data["voice"]/60)
         embed = discord.Embed(
     		title=f"Top users do servidor:",
@@ -94,7 +99,8 @@ class ProfileCommands(BaseCommands):
     async def stats_slash(self, interaction, user: Member = None):
         user = user or interaction.user
         user_data = await self.level_sys.get_data(user.id)
-        next= (user_data["level"] ** 2) * 100
+        taxa = await self.use.obter_taxa(self.processor.inicios, self.processor.fins, self.processor.valores, user_data["level"])
+        next= (user_data["level"] ** 2) * taxa +100
         minutes = int(user_data["voice"]/60)
         embed = discord.Embed(
     		title=f"Stats de {user.name}",
@@ -107,4 +113,6 @@ class ProfileCommands(BaseCommands):
         embed.set_footer(text=f"Requisitado por {interaction.user.name}", icon_url=interaction.user.avatar.url)
         
         await interaction.response.send_message(embed=embed)
+    
+    
         
