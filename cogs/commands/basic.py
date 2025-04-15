@@ -19,22 +19,18 @@ class BasicCommands(BaseCommands):
         await interaction.response.send_message(
             f"🏓 Pong! {round(self.bot.latency * 1000)}ms")
 
-    @commands.command(name="ajuda", aliases=["help"])
-    async def help_prefix(self, ctx, text: str = None):
-        if text == "adm":
-        	ajuda_msg = (
-        		"addlevel @user amount - a.\n"
-	            "diga <mensagem> - O bot repete a mensagem.\n"
-	            "ask <pergunta> - Faz uma pergunta a Bei Bei.\n"
-	            "xp - Mostra seu XP.\n"
-	            "perfil - Exibe seu perfil.\n"
-	            "top - Mostra o ranking dos usuários.\n"
-	            "avatar - Exibe seu avatar."
-            )
-        else:
+    @commands.command(name="ajuda", aliases=["help", "s", 'search'])
+    async def help_prefix(self, ctx, text: str = "basic"):
         	
-        embed= self.use.create("**Comandos Disponíveis:**", ajuda_msg)
-        embed.set_footer(text=f"Requisitado por {ctx.author.mention}")
+        embed= await self.use.create("**Comandos Disponíveis:**", self.ht.textos[text])
+        embed.set_footer(text=f"Requisitado por {ctx.author.name}")
         await ctx.send(embed= embed)
+        
+    @app_commands.command(name="help", description="Exibe a lista de comandos")
+    async def help_slash(self, interaction, text: str = "basic"):
+    	embed= await self.use.create("**Comandos Disponíveis:**", self.ht.textos[text])
+    	embed.set_footer(text=f"Requisitado por {interaction.user.name}")
+        
+    	await interaction.response.send_message(embed= embed)
 
 # Implementação similar para help
