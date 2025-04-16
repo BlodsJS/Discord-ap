@@ -2,6 +2,7 @@ from . import BaseEventCog
 from discord import Message, Member
 from discord.ext import commands
 import logging
+import random
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,8 @@ class MessageEvents(BaseEventCog):
             	await self.db.increment_xp(user_id, 13)
             	user_data = await self.db.get_user_data(user_id)
             	taxa = await self.use.obter_taxa(self.processor.inicios, self.processor.fins, self.processor.valores, user_data["level"])
+            	money = user_data['money'] + random.randint(500, 1100)
+            	await self.db.update_field(user_id,'money', money)
             	if user_data["xp"] >= (user_data["level"]**2) * taxa +100:
             		new_level = user_data["level"] +1
             		new_xp = max(user_data["xp"] - ((user_data["level"]**2) * 100), 0)

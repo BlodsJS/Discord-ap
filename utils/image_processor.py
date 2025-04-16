@@ -121,7 +121,7 @@ class ImageProcessor(utilsPort):
     		texts.append(line)
     	return texts
 	   
-    def _add_profile_texts(self, editor: Editor, user: Member, xp: int, level: int, house: str, rank: int, taxa: int):
+    def _add_profile_texts(self, editor: Editor, user: Member, xp: int, level: int, house: str, rank: int, taxa: int, money:int, rep: int):
         """Adiciona textos complexos ao perfil"""
         # Configurações de layout
         words = self.text_break("Isso é um teste para ver como o texto se ajusta dentro da caixa de fala.", 27)
@@ -132,8 +132,8 @@ class ImageProcessor(utilsPort):
                 'position': (200, 45),
                 'lines': [
                     user.name,
-                    f"BKZ: Em breve",
-                    f"XP: {xp}/{(level ** 2) * taxa +100}",
+                    f"BKZ: {money:,}",
+                    f"XP: {xp:,}/{(level ** 2) * taxa +100}",
                 ],
                 'font': self.fonts['body'],
                 'color': "black"
@@ -143,7 +143,7 @@ class ImageProcessor(utilsPort):
             'lines': [
             	f"Rank: #{rank}",
             	f"Cargo: {house}",
-            	"Reps: Em breve"
+            	"Reps: {rep:,}"
             ],
             'font': self.fonts['body'],
             'color': "black"
@@ -214,7 +214,7 @@ class ImageProcessor(utilsPort):
 	        )
 	
 	        # Nível e XP
-	        level_info = f"Level {user_data[2]}"
+	        level_info = f"Level: {user_data[2]}"
 	        bg.text(
 	            (x_start, y + 45), 
 	            level_info, 
@@ -229,14 +229,14 @@ class ImageProcessor(utilsPort):
 	            color="#C0C0C0"
 	        )
 	        
-	        message_info = f"chat {user_data[3]:,}"
+	        message_info = f"Chat: {user_data[3]:,}"
 	        bg.text(
 	            (x_start+ 220, y + 60), 
 	            message_info, 
 	            font=Font.poppins(size=font_size - 9, variant="bold"), 
 	            color="#C0C0C0"
 	        )
-	        voice_info = f"Call {minutos:,}"
+	        voice_info = f"Call: {minutos:,}"
 	        bg.text(
 	            (x_start+ 220, y +45), 
 	            voice_info, 

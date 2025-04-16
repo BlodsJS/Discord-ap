@@ -31,7 +31,7 @@ class AdminCommands(BaseCommands):
         user_id= str(user.id)
         user_data = await self.db.get_user_data(user_id)
         await self.db.update_field(user_id, 'money', money)
-        embed = await self.use.create("BKZ adicionado por ctx.author.mentoon", f"{money} BKZ foram adicionados a {user.name}")
+        embed = await self.use.create("BKZ adicionado por {ctx.author.mention}", f"{money:,} BKZ foram adicionados a {user.name}")
         await ctx.send(embed=embed)
     
     @commands.command(name="addxp", aliases=["add xp"])

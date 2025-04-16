@@ -19,6 +19,16 @@ class BasicCommands(BaseCommands):
         await interaction.response.send_message(
             f"🏓 Pong! {round(self.bot.latency * 1000)}ms")
 
+    @commands.command(name="rep")
+    async def rep_prefix(self, ctx, user: Member):
+    	user_id = str(user.id)
+    	user_data = await self.db.get_user_data(user_id)
+    	new = user_data['rep'] +1
+    	await self.db.update_field(user_id, 'rep', new)
+    	
+    	embed = await self.use.create("Reputação enviada com sucesso!", f"{ctx.author.name} enviou uma rep a {user.name}")
+    	await ctx.send(embed=embed)
+    	
     @commands.command(name="ajuda", aliases=["help", "s", 'search'])
     async def help_prefix(self, ctx, text: str = "basic"):
         	
