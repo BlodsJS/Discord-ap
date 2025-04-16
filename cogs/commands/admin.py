@@ -9,7 +9,32 @@ import logging
 logger = logging.getLogger(__name__)
 
 class AdminCommands(BaseCommands):
-    @commands.command(name="addxp")
+    
+    @commands.command(name="update", aliases=["up"])
+    @commands.has_permissions(administrator=True)
+    async def update_prefix(self, ctx, user: Member, text: str, amount: int):
+        if text not in ["xp", "level", "message", "voice", "money", "rep"]:
+        	embed = await self.use.create("Erro: field  não encontrado", f"{ctx.author.mention}, o field {text} não existe, use uma das opçōes abaixo:\n  xp, level, message, voice, money, rep")
+        	await ctx.send(embed=embed)
+        	return
+        user_id= str(user.id)
+        user_data = await self.db.get_user_data(user_id)
+        
+        value = user_data[text] + amount
+        await self.db.update_field(user_id, text, value)
+        embed = await self.use.create(f"{text} foi atualizado por {ctx.author.mention}", f"{amount} foi adicionado a {user.name}")
+        await ctx.send(embed=embed)
+    
+    @commands.command(name="addmoney", aliases=["add money"])
+    @commands.has_permissions(administrator=True)
+    async def addmoney_prefix(self, ctx, user: Member, money: int):
+        user_id= str(user.id)
+        user_data = await self.db.get_user_data(user_id)
+        await self.db.update_field(user_id, 'money', money)
+        embed = await self.use.create("BKZ adicionado por {ctx.author.mention}", f"{money:,} BKZ foram adicionados a {user.name}")
+        await ctx.send(embed=embed)
+    
+    @commands.command(name="addxp", aliases=["add xp"])
     @commands.has_permissions(administrator=True)
     async def addxp_prefix(self, ctx, user: Member, xp: int):
         user_id= str(user.id)
@@ -95,10 +120,11 @@ class AdminCommands(BaseCommands):
          	await ctx.send(embed=embed)
         
         
-    @commands.command(name="addchannel", aliases=["ac"])
+    @commands.command(name="addchannel", aliases=["ac", "add channel"])
     @commands.has_permissions(administrator=True)
     async def addchannel_prefix(self, ctx, user: Member, level: int):
-    	pass
+    	embed = await self.use.create("Adicionar canais:", "Em desenvolvimento")
+    	await ctx.send(embed=embed)
     	
     	
     #barras
@@ -198,4 +224,18 @@ class AdminCommands(BaseCommands):
         	embed= await self.use.create(f"Erro: comando requisitado por {interaction.user.mention}", "⚠️ Alvo inválido. Use `@usuário` ou `all`.")
         	await interaction.response.send_message(embed=embed)
         	return
+        	
+    @commands.command(name="ban")
+    @commands.has_permissions(administrator=True)
+    async def ban_prefix(self, ctx, user: Member, reason: str = ""):
+        embed = await self.use.create("Comando de ban", "Em desenvolvimento")
         
+        await ctx.send(embed=embed)
+        
+    @app_commands.command(name="ban", description="Bane um usuario do servidor")
+    @app_commands.describe(target="alvo")
+    @app_commands.checks.has_permissions(administrator=True)
+    async def ban_slash(self, interaction, target: Member, reason: str = ""):
+    	embed = await self.use.create("Comando de ban", "Em desenvolvimento")
+    	
+    	await interaction.response.send_message(embed=embed)

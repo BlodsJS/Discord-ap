@@ -1,4 +1,5 @@
 from .useful_system import UsefulSystem
+from .message_system import MessageSystem
 import os
 from easy_pil import Editor, Canvas, Font, load_image_async
 import discord
@@ -7,6 +8,7 @@ import bisect
 class utilsPort:
 	def __init__(self):
 		self.use = UsefulSystem()
+		self.ms = Messagesystem()
 		self.base_path = os.path.dirname(__file__)
         
 		self.assets = {
@@ -47,3 +49,4 @@ class utilsPort:
 		self.inicios = [intervalo[0] for intervalo in self.intervalos_ordenados]
 		self.fins = [intervalo[1] for intervalo in self.intervalos_ordenados]
 		self.valores = [intervalo[2] for intervalo in self.intervalos_ordenados]
+		

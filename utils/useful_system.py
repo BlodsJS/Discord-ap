@@ -5,6 +5,8 @@ from datetime import datetime
 from discord import Member, TextChannel
 import bisect
 
+logger = logging.getLogger(__name__)
+
 class UsefulSystem:
 	def __init__(self):
 		self.cor = discord.Color.default()	
@@ -15,6 +17,7 @@ class UsefulSystem:
 			description= desc,
 			color= color
 		)
+		logger.info(f"objeto retornado na embed: {embed}")
 		return embed
 		
 	async def obter_taxa(self, inicios, fins, valores, acount):

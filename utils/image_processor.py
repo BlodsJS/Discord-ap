@@ -121,7 +121,7 @@ class ImageProcessor(utilsPort):
     		texts.append(line)
     	return texts
 	   
-    def _add_profile_texts(self, editor: Editor, user: Member, xp: int, level: int, house: str, rank: int, taxa: int):
+    def _add_profile_texts(self, editor: Editor, user: Member, xp: int, level: int, house: str, rank: int, taxa: int, money:int, rep: int):
         """Adiciona textos complexos ao perfil"""
         # Configurações de layout
         words = self.text_break("Isso é um teste para ver como o texto se ajusta dentro da caixa de fala.", 27)
@@ -132,8 +132,8 @@ class ImageProcessor(utilsPort):
                 'position': (200, 45),
                 'lines': [
                     user.name,
-                    f"BKZ: Em breve",
-                    f"XP: {xp}/{(level ** 2) * taxa +100}",
+                    f"BKZ: {money:,}",
+                    f"XP: {xp:,}/{(level ** 2) * taxa +100}",
                 ],
                 'font': self.fonts['body'],
                 'color': "black"
@@ -143,13 +143,13 @@ class ImageProcessor(utilsPort):
             'lines': [
             	f"Rank: #{rank}",
             	f"Cargo: {house}",
-            	"Reps: Em breve"
+            	"Reps: {rep:,}"
             ],
             'font': self.fonts['body'],
             'color': "black"
             },
             'word': {
-            	'position': (60, 260),
+            	'position': (68, 260),
             	'lines': words,
             	'font': self.fonts['body'],
             	'color': "black"
@@ -173,17 +173,17 @@ class ImageProcessor(utilsPort):
                     font=config['font']
                 )
 
-    async def _add_leaderboard_entry(self, bg, user_data, idx, card_height, taxa, name, avatar):
+    async def _add_leaderboard_entry(self, bg, user_data, display_rank, visual_index, card_height, taxa, name, avatar):
 	    """Adiciona uma entrada no ranking à imagem."""
 	    try:
 	        WIDTH = 580
 	        HEADER_HEIGHT = 5  # Altura do cabeçalho
 	
 	        # Calcular posição Y do card
-	        y = HEADER_HEIGHT + (idx - 1) * card_height
+	        y = HEADER_HEIGHT + visual_index * card_height
 	
 	        # Cor de fundo alternada para cada linha
-	        card_color = "#2C2F33" if idx % 2 == 0 else "#23272A"
+	        card_color = "#2C2F33" if visual_index % 2 == 0 else "#23272A"
 	        #bg.rectangle((158, 70), width=250, height=23, radius=10, outline="black", stroke_width=3)
 	        minutos= int(user_data[4]/60)
 	        required_xp = (user_data[2]**2)*taxa +100
@@ -194,41 +194,49 @@ class ImageProcessor(utilsPort):
 	
 	        # Configurações de texto
 	        text_color = "#FFFFFF"
-	        font_size = 20 
+	        font_size = 25
 	        x_start = 180 if avatar else 40
 	
 	        # Número do ranking
 	        bg.text(
 	            (23, y + 27), 
-	            f"#{idx}", 
+	            f"#{display_rank}", 
 	            font=Font.poppins(size=22, variant="bold"), 
 	            color=text_color
 	        )
 	
 	        # Nome do usuário
 	        bg.text(
-	            (x_start, y + 25), 
+	            (x_start, y + 16), 
 	            name, 
-	            font=Font.poppins(size=font_size, variant="bold"), 
+	            font=Font.poppins(size=font_size-3, variant="bold"), 
 	            color=text_color
 	        )
 	
 	        # Nível e XP
-	        xp_info = f"Level {user_data[2]} • XP: {user_data[1]:,}/{required_xp:,}"
+	        level_info = f"Level: {user_data[2]}"
+	        bg.text(
+	            (x_start, y + 45), 
+	            level_info, 
+	            font=Font.poppins(size=font_size - 9, variant="bold"), 
+	            color="#C0C0C0"
+	        )
+	        xp_info = f"XP: {user_data[1]:,}/{required_xp:,}"
 	        bg.text(
 	            (x_start, y + 60), 
 	            xp_info, 
 	            font=Font.poppins(size=font_size - 9, variant="bold"), 
 	            color="#C0C0C0"
 	        )
-	        message_info = f"Mensagens {user_data[3]:,}"
+	        
+	        message_info = f"Chat: {user_data[3]:,}"
 	        bg.text(
 	            (x_start+ 220, y + 60), 
 	            message_info, 
 	            font=Font.poppins(size=font_size - 9, variant="bold"), 
 	            color="#C0C0C0"
 	        )
-	        voice_info = f"Call - minutos {minutos:,}"
+	        voice_info = f"Call: {minutos:,}"
 	        bg.text(
 	            (x_start+ 220, y +45), 
 	            voice_info, 
@@ -246,7 +254,7 @@ class ImageProcessor(utilsPort):
 	    except Exception as e:
 	        logger.error(f"Erro ao adicionar entrada no ranking: {e}")
 	        
-    async def create_leaderboard(self, users_data: list, guild, guild_icon: Optional[str] = None) -> BytesIO:
+    async def create_leaderboard(self, users_data: list, guild, offset, guild_icon: Optional[str] = None) -> BytesIO:
         """Gera imagem do ranking de usuários"""
         print(users_data)
         try:
@@ -263,12 +271,13 @@ class ImageProcessor(utilsPort):
                 bg.paste(icon, (WIDTH//2 - 25, 10))
                 
             # Processar cada usuário
-            for index, user_data in enumerate(users_data, start=1):
+            for visual_index, user_data in enumerate(users_data):
+                display_rank = offset + visual_index + 1
                 taxa = await self.use.obter_taxa(self.inicios, self.fins, self.valores, user_data[2])
                 member = guild.get_member(int(user_data[0])) if guild else None
                 name = member.display_name
                 avatar = member.avatar.url
-                await self._add_leaderboard_entry(bg, user_data, index, CARD_HEIGHT, taxa, name, avatar)
+                await self._add_leaderboard_entry(bg, user_data, display_rank, visual_index, CARD_HEIGHT, taxa, name, avatar)
             
             return self._to_bytesio(bg.image, "leaderboard.png")
             

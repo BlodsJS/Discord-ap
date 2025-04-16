@@ -1,7 +1,7 @@
 #inicio do db
 import aiosqlite
 import logging
-from typing import Optional, Dict, Any, AsyncContextManager
+from typing import Optional, Dict, Any, AsyncContextManager, List
 import cachetools
 import asyncio
 import discord
@@ -47,7 +47,9 @@ class DatabaseManager:
                 xp INTEGER DEFAULT 0,
                 level INTEGER DEFAULT 1,
                 message INTEGER DEFAULT 0,
-                voice INTEGER DEFAULT 0
+                voice INTEGER DEFAULT 0,
+                money INTEGER DEFAULT 0,
+                rep INTEGER DEFAULT 0
             )
         '''):
             await self.connection.commit()
@@ -68,7 +70,7 @@ class DatabaseManager:
     # Método genérico seguro para atualizações
     async def update_field(self, user_id: str, field: str, value: Any) -> bool:
         await self.connect()
-        allowed_fields = {'xp', 'level', 'message', 'voice'}
+        allowed_fields = {'xp', 'level', 'message', 'voice', 'money', 'rep'}
         if field not in allowed_fields:
             raise ValueError(f"Campo inválido: {field}. Permitidos: {allowed_fields}")
         
@@ -154,7 +156,7 @@ class DatabaseManager:
         
             
         async with self.connection.execute(
-            "SELECT xp, level, message, voice FROM xp_data WHERE user_id = ?",
+            "SELECT xp, level, message, voice, money, rep FROM xp_data WHERE user_id = ?",
             (user_id,)
         ) as cursor:
             
@@ -164,13 +166,15 @@ class DatabaseManager:
             		"xp": row[0],
             		"level": row[1],
             		"message": row[2],
-            		"voice": row[3]
+            		"voice": row[3],
+            		"money": row[4],
+            		"rep": row[5]
             	}
             	return user_data
             else:
             	async with self.connection.execute(
-            		"INSERT INTO xp_data (user_id, xp, level, message, voice) VALUES (?, ?, ?, ?, ?)",
-            		(user_id, 0, 1, 0, 0)
+            		"INSERT INTO xp_data (user_id, xp, level, message, voice, money, rep) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            		(user_id, 0, 1, 0, 0, 0, 0)
             	) as cursor:
             		
 	            	await self.connection.commit()
@@ -178,7 +182,9 @@ class DatabaseManager:
 	            		"xp": 0,
 	            		"level": 1,
 	            		"message": 0,
-	            		"voice": 0
+	            		"voice": 0,
+	            		"money": 0,
+	            		"rep": 0
 	            	}
 	            	
     async def get_user_rank(self, user_id: str) -> int:
@@ -197,6 +203,31 @@ class DatabaseManager:
     	   return row[0] if row else 1
         
         
+    async def top_users_field(self, field: str, offset: int = 0):
+    	await self.connect()
+    	try:
+	        # Consulta assíncrona ao banco de dados
+	        async with self.connection.execute(f'''
+	            SELECT user_id, {field}
+	            FROM xp_data 
+	            ORDER BY {field} DESC
+	            LIMIT 10 OFFSET ?
+	            ''', (offset,)) as cursor:
+	            
+	            top_server = await cursor.fetchall()
+	        
+	        
+	
+	        if not top_server:
+	            return 
+	        return top_server
+	    
+    	except Exception as e:
+	        logging.error(f"Erro ao gerar ranking de {field}: {e}")
+	        return
+	        
+	        
+    
     async def top_users(self, offset: int = 0):
     	await self.connect()
     	try:
