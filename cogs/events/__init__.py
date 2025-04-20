@@ -4,6 +4,9 @@ from utils.level_system import LevelSystem
 from cachetools import TTLCache
 from utils.useful_system import UsefulSystem
 from utils.image_processor import ImageProcessor
+from utils.channel_system import ChannelSystem
+
+
 class BaseEventCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -11,6 +14,7 @@ class BaseEventCog(commands.Cog):
         self.db = DatabaseManager()
         self.level_sys = LevelSystem(self.db)
         self.use = UsefulSystem()
+        self.c_db = ChannelSystem()
         self.cooldown_cache = TTLCache(maxsize=1000, ttl=80)
         self.level_messages = {
 	     	5: "Você deixou de ser um zero... para se tornar um um. Não chore ainda — o abismo está só começando a sorrir para você.",

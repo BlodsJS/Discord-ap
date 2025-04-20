@@ -111,7 +111,7 @@ class ProfileCommands(BaseCommands):
         user_id = str(user.id)
         rank = await self.level_sys.get_rank(user_id)
         house = await self.processor.get_house(user)
-        image = await self.processor.create_profile_card(user, user_data["xp"], user_data["level"], house, rank)
+        image = await self.processor.create_profile_card(user, user_data["xp"], user_data["level"], house, rank, user_data['money'], user_data['rep'])
         await ctx.send(file=image)
         
     #barra
@@ -123,7 +123,7 @@ class ProfileCommands(BaseCommands):
         user_data = await self.level_sys.get_data(user.id)
         rank = await self.level_sys.get_rank(user_id)
         house = await self.processor.get_house(user)
-        image = await self.processor.create_profile_card(user, user_data["xp"], user_data["level"], house, rank)
+        image = await self.processor.create_profile_card(user, user_data["xp"], user_data["level"], house, rank, user_data['money'], user_data['rep'])
         await interaction.response.send_message(file=image)
         
     @commands.command(name="rank")
