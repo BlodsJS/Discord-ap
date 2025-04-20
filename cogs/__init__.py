@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 async def setup(bot):
     #cogs
+    
     await bot.add_cog(BasicCommands(bot))
     logger.info("Comandos Basicos inicializados")
     

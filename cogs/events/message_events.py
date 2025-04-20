@@ -16,6 +16,9 @@ class MessageEvents(BaseEventCog):
             user_data = await self.db.get_user_data(user_id)
             await self.db.increment_message_count(user_id)
             # Verificar cooldown
+            canais = self.c_db.get_canais(message.guild.id, "text")
+            if message.channel.id not in canais:
+            	return
             if self.cooldown_cache.get(user_id):
             	return
             	

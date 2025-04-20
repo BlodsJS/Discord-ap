@@ -1,7 +1,7 @@
 from . import BaseCommands
 import discord
 from discord.ext import commands
-from discord import app_commands
+from discord import app_commands, Member
 import logging
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ class BasicCommands(BaseCommands):
     	new = user_data['rep'] +1
     	await self.db.update_field(user_id, 'rep', new)
     	
-    	embed = await self.use.create("Reputação enviada com sucesso!", f"{ctx.author.name} enviou uma rep a {user.name}")
+    	embed = await self.use.create("Reputação enviada com sucesso!", f"{ctx.author.mention} enviou uma rep a {user.mention}")
     	await ctx.send(embed=embed)
     	
     @commands.command(name="ajuda", aliases=["help", "s", 'search'])

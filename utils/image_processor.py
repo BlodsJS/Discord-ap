@@ -86,7 +86,7 @@ class ImageProcessor(utilsPort):
         casa_encontrada = next((CASAS[role_id] for role_id in role_ids & casa_ids), "cidadao")
         return casa_encontrada
 	    
-    async def create_profile_card(self, user: Member, xp: int, level: int, house: str, rank: int) -> BytesIO:
+    async def create_profile_card(self, user: Member, xp: int, level: int, house: str, rank: int, money, rep) -> BytesIO:
         """Cria o cartão de perfil completo com elementos customizados"""
         try:
             # Configurações
@@ -107,7 +107,7 @@ class ImageProcessor(utilsPort):
                 bg.paste(house_icon.resize((110, 110)), HOUSE_POS)
             
             # Adicionar textos
-            self._add_profile_texts(bg, user, xp, level, house, rank, taxa)
+            self._add_profile_texts(bg, user, xp, level, house, rank, taxa, money, rep)
             return self._to_bytesio(bg.image, "profile.png")
             
         except Exception as e:
@@ -143,7 +143,7 @@ class ImageProcessor(utilsPort):
             'lines': [
             	f"Rank: #{rank}",
             	f"Cargo: {house}",
-            	"Reps: {rep:,}"
+            	f"Reps: {rep:,}"
             ],
             'font': self.fonts['body'],
             'color': "black"
