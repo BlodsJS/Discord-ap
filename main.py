@@ -7,17 +7,17 @@ import discord
 from discord.ext import commands
 from config import Config
 from cogs import setup as setup_cogs
-import os
-print("Diretório atual:", os.getcwd())
+print("Diretu00f3rio atual:", os.getcwd())
 
-# Configuração básica de logging
+# Configurau00e7u00e3o bu00e1sica de logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s | %(levelname)s | %(name)s | %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 logger = logging.getLogger('bot.main')
-        
+
+
 class Bot(commands.Bot):
     def __init__(self):
         super().__init__(
@@ -42,7 +42,8 @@ class Bot(commands.Bot):
         await self.load_essentials()
         await setup_cogs(self)
         await self.tree.sync()
-        logger.info(f'Carregado {len(self.cogs)} cogs e {len(self.commands)} comandos')
+        logger.info(f'Carregado {len(self.cogs)} cogs e {
+                    len(self.commands)} comandos')
 
     async def load_essentials(self) -> None:
         """Load core components"""
@@ -55,7 +56,7 @@ class Bot(commands.Bot):
     async def on_ready(self) -> None:
         """Bot startup handler"""
         logger.info(f'Conectado como: {self.user.name} | ID: {self.user.id}')
-        logger.info(f'Latência: {round(self.latency * 1000)}ms')
+        logger.info(f'Latu00eancia: {round(self.latency * 1000)}ms')
         await self.change_presence(activity=discord.Game(name="Inicializando..."))
 
     async def close(self) -> None:
@@ -66,17 +67,17 @@ class Bot(commands.Bot):
     async def shutdown(self) -> None:
         """Graceful shutdown sequence"""
         logger.info('Iniciando desligamento seguro...')
-        
-        # Encerrar sessão HTTP
+
+        # Encerrar sessu00e3o HTTP
         if self.http_session and not self.http_session.closed:
             await self.http_session.close()
-            logger.info('Sessão HTTP encerrada')
-        
-        # Fechar conexão do banco
+            logger.info('Sessu00e3o HTTP encerrada')
+
+        # Fechar conexu00e3o do banco
         if self.db and self.db.connection:
             await self.db.close()
-            logger.info('Conexão com banco de dados fechada')
-        
+            logger.info('Conexu00e3o com banco de dados fechada')
+
         # Cancelar tasks pendentes
         for task in asyncio.all_tasks():
             if task is not asyncio.current_task():
@@ -87,6 +88,7 @@ class Bot(commands.Bot):
                     pass
         logger.info('Todas as tasks foram canceladas')
 
+
 async def main():
     """Entry point"""
     bot = Bot()
@@ -95,11 +97,10 @@ async def main():
     except KeyboardInterrupt:
         logger.info("Desligamento solicitado via teclado")
     except Exception as e:
-        logger.error(f"Erro crítico: {e}")
+        logger.error(f"Erro cru00edtico: {e}")
     finally:
         if not bot.is_closed():
             await bot.close()
 
 if __name__ == "__main__":
     asyncio.run(main())
-
