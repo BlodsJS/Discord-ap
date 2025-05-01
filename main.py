@@ -99,7 +99,7 @@ async def main():
     except Exception as e:
         logger.error(f"Erro cru00edtico: {e}")
     finally:
-        if not bot.is_close():
+        if not bot.is_closed():
             await bot.close()
 
 if __name__ == "__main__":

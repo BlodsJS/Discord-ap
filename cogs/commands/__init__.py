@@ -1,10 +1,10 @@
 from discord.ext import commands
 from database import DatabaseManager
 from utils.image_processor import ImageProcessor
-from utils.level_system import LevelSystem
 from utils.useful_system import UsefulSystem
 from utils.help_text import TextSystem
 from utils.channel_system import ChannelSystem
+from utils.level_system import LevelSystem
 
 class BaseCommands(commands.Cog):
     def __init__(self, bot):
