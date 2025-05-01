@@ -7,6 +7,7 @@ from discord import Member, TextChannel
 from database import DatabaseManager
 
 logger = logging.getLogger(__name__)
+logger.info("Level carregado")
 
 class LevelSystem:
     def __init__(self, db: DatabaseManager):
@@ -62,12 +63,12 @@ class LevelSystem:
         return base_message
         
     async def get_rank(self, user_id:str) -> int:
-    	rank = await self.db.get_user_rank(user_id)
-    	return rank
-    	
+        rank = await self.db.get_user_rank(user_id)
+        return rank
+        
     async def get_data(self, user_id: str):
-    	user_data = await self.db.get_user_data(user_id)
-    	return user_data
+        user_data = await self.db.get_user_data(user_id)
+        return user_data
 
     @staticmethod
     def calculate_rank(roles: list, rank_priority: list) -> str:

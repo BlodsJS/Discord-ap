@@ -6,6 +6,7 @@ from datetime import datetime
 import logging
 
 logger = logging.getLogger(__name__)
+logger.info("Voice carregado")
 
 class VoiceEvents(BaseEventCog):
     def __init__(self, bot):

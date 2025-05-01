@@ -10,10 +10,11 @@ from easy_pil import Editor, Canvas, Font, load_image_async
 import os
 import textwrap
 import bisect
-# ✅ Correto (utils está no mesmo nível que cogs/)
+
 from . import utilsPort
 
 logger = logging.getLogger(__name__)
+logger.info("Image carregado")
 
 class ImageProcessor(utilsPort):
 
@@ -71,12 +72,12 @@ class ImageProcessor(utilsPort):
     
     async def get_house(self, user: Member) -> str:
         if user.id in self.users:
-        	return self.users[user.id]
+            return self.users[user.id]
         CASAS = {
-        	1227357334905290764: "Leonipards",
-        	1227357084543225939: "Corbusier",
-        	1227359011624456313: "Synexa",
-        	1227358673056043018: "Vildjharta"
+            1227357334905290764: "Leonipards",
+            1227357084543225939: "Corbusier",
+            1227359011624456313: "Synexa",
+            1227358673056043018: "Vildjharta"
         }
         
         role_ids = {role.id for role in user.roles}
@@ -85,7 +86,7 @@ class ImageProcessor(utilsPort):
         # 3. Encontra a primeira interseção (se existir)
         casa_encontrada = next((CASAS[role_id] for role_id in role_ids & casa_ids), "cidadao")
         return casa_encontrada
-	    
+        
     async def create_profile_card(self, user: Member, xp: int, level: int, house: str, rank: int, money, rep) -> BytesIO:
         """Cria o cartão de perfil completo com elementos customizados"""
         try:
@@ -115,12 +116,12 @@ class ImageProcessor(utilsPort):
             return self._error_image()
 
     def text_break(self, text: str, w: int):
-    	wrapped_text = textwrap.wrap(text, width=w)
-    	texts = []
-    	for i, line in enumerate(wrapped_text):
-    		texts.append(line)
-    	return texts
-	   
+        wrapped_text = textwrap.wrap(text, width=w)
+        texts = []
+        for i, line in enumerate(wrapped_text):
+            texts.append(line)
+        return texts
+       
     def _add_profile_texts(self, editor: Editor, user: Member, xp: int, level: int, house: str, rank: int, taxa: int, money:int, rep: int):
         """Adiciona textos complexos ao perfil"""
         # Configurações de layout
@@ -141,24 +142,24 @@ class ImageProcessor(utilsPort):
             'ranks': {
             'position': (420, 45),
             'lines': [
-            	f"Rank: #{rank}",
-            	f"Cargo: {house}",
-            	f"Reps: {rep:,}"
+                f"Rank: #{rank}",
+                f"Cargo: {house}",
+                f"Reps: {rep:,}"
             ],
             'font': self.fonts['body'],
             'color': "black"
             },
             'word': {
-            	'position': (68, 260),
-            	'lines': words,
-            	'font': self.fonts['body'],
-            	'color': "black"
+                'position': (68, 260),
+                'lines': words,
+                'font': self.fonts['body'],
+                'color': "black"
             },
             'desc': {
-            	'position': (30, 495),
-            	'lines':descs,
-            	'font': Font.poppins(variant="bold", size=16),
-            	'color': "white"
+                'position': (30, 495),
+                'lines':descs,
+                'font': Font.poppins(variant="bold", size=16),
+                'color': "white"
             }
             # ... outros elementos de texto
         }
@@ -174,86 +175,86 @@ class ImageProcessor(utilsPort):
                 )
 
     async def _add_leaderboard_entry(self, bg, user_data, display_rank, visual_index, card_height, taxa, name, avatar):
-	    """Adiciona uma entrada no ranking à imagem."""
-	    try:
-	        WIDTH = 580
-	        HEADER_HEIGHT = 5  # Altura do cabeçalho
-	
-	        # Calcular posição Y do card
-	        y = HEADER_HEIGHT + visual_index * card_height
-	
-	        # Cor de fundo alternada para cada linha
-	        card_color = "#2C2F33" if visual_index % 2 == 0 else "#23272A"
-	        #bg.rectangle((158, 70), width=250, height=23, radius=10, outline="black", stroke_width=3)
-	        minutos= int(user_data[4]/60)
-	        required_xp = (user_data[2]**2)*taxa +100
-	        if avatar: 
-	            avatar = Editor(await load_image_async(avatar))
-	            avatar.resize((80, 80)).circle_image()
-	            bg.paste(avatar.image, (80, y + 10))
-	
-	        # Configurações de texto
-	        text_color = "#FFFFFF"
-	        font_size = 25
-	        x_start = 180 if avatar else 40
-	
-	        # Número do ranking
-	        bg.text(
-	            (23, y + 27), 
-	            f"#{display_rank}", 
-	            font=Font.poppins(size=22, variant="bold"), 
-	            color=text_color
-	        )
-	
-	        # Nome do usuário
-	        bg.text(
-	            (x_start, y + 16), 
-	            name, 
-	            font=Font.poppins(size=font_size-3, variant="bold"), 
-	            color=text_color
-	        )
-	
-	        # Nível e XP
-	        level_info = f"Level: {user_data[2]}"
-	        bg.text(
-	            (x_start, y + 45), 
-	            level_info, 
-	            font=Font.poppins(size=font_size - 9, variant="bold"), 
-	            color="#C0C0C0"
-	        )
-	        xp_info = f"XP: {user_data[1]:,}/{required_xp:,}"
-	        bg.text(
-	            (x_start, y + 60), 
-	            xp_info, 
-	            font=Font.poppins(size=font_size - 9, variant="bold"), 
-	            color="#C0C0C0"
-	        )
-	        
-	        message_info = f"Chat: {user_data[3]:,}"
-	        bg.text(
-	            (x_start+ 220, y + 60), 
-	            message_info, 
-	            font=Font.poppins(size=font_size - 9, variant="bold"), 
-	            color="#C0C0C0"
-	        )
-	        voice_info = f"Call: {minutos:,}"
-	        bg.text(
-	            (x_start+ 220, y +45), 
-	            voice_info, 
-	            font=Font.poppins(size=font_size - 9, variant="bold"), 
-	            color="#C0C0C0"
-	        )
-	        
-	
-	        # Barra de progresso
-	        progress_width = 360 #barra de xp
-	        progress = (user_data[1] / required_xp) * progress_width
-	        bg.rectangle((x_start, y + 82), width = progress_width, height = 5, fill = "#40444A", radius = 4)
-	        bg.rectangle((x_start,y + 82), width = progress, height = 5, fill = "#5865F2", radius = 4)
-	
-	    except Exception as e:
-	        logger.error(f"Erro ao adicionar entrada no ranking: {e}")
-	        
+        """Adiciona uma entrada no ranking à imagem."""
+        try:
+            WIDTH = 580
+            HEADER_HEIGHT = 5  # Altura do cabeçalho
+    
+            # Calcular posição Y do card
+            y = HEADER_HEIGHT + visual_index * card_height
+    
+            # Cor de fundo alternada para cada linha
+            card_color = "#2C2F33" if visual_index % 2 == 0 else "#23272A"
+            #bg.rectangle((158, 70), width=250, height=23, radius=10, outline="black", stroke_width=3)
+            minutos= int(user_data[4]/60)
+            required_xp = (user_data[2]**2)*taxa +100
+            if avatar: 
+                avatar = Editor(await load_image_async(avatar))
+                avatar.resize((80, 80)).circle_image()
+                bg.paste(avatar.image, (80, y + 10))
+    
+            # Configurações de texto
+            text_color = "#FFFFFF"
+            font_size = 25
+            x_start = 180 if avatar else 40
+    
+            # Número do ranking
+            bg.text(
+                (23, y + 27), 
+                f"#{display_rank}", 
+                font=Font.poppins(size=22, variant="bold"), 
+                color=text_color
+            )
+    
+            # Nome do usuário
+            bg.text(
+                (x_start, y + 16), 
+                name, 
+                font=Font.poppins(size=font_size-3, variant="bold"), 
+                color=text_color
+            )
+    
+            # Nível e XP
+            level_info = f"Level: {user_data[2]}"
+            bg.text(
+                (x_start, y + 45), 
+                level_info, 
+                font=Font.poppins(size=font_size - 9, variant="bold"), 
+                color="#C0C0C0"
+            )
+            xp_info = f"XP: {user_data[1]:,}/{required_xp:,}"
+            bg.text(
+                (x_start, y + 60), 
+                xp_info, 
+                font=Font.poppins(size=font_size - 9, variant="bold"), 
+                color="#C0C0C0"
+            )
+            
+            message_info = f"Chat: {user_data[3]:,}"
+            bg.text(
+                (x_start+ 220, y + 60), 
+                message_info, 
+                font=Font.poppins(size=font_size - 9, variant="bold"), 
+                color="#C0C0C0"
+            )
+            voice_info = f"Call: {minutos:,}"
+            bg.text(
+                (x_start+ 220, y +45), 
+                voice_info, 
+                font=Font.poppins(size=font_size - 9, variant="bold"), 
+                color="#C0C0C0"
+            )
+            
+    
+            # Barra de progresso
+            progress_width = 360 #barra de xp
+            progress = (user_data[1] / required_xp) * progress_width
+            bg.rectangle((x_start, y + 82), width = progress_width, height = 5, fill = "#40444A", radius = 4)
+            bg.rectangle((x_start,y + 82), width = progress, height = 5, fill = "#5865F2", radius = 4)
+    
+        except Exception as e:
+            logger.error(f"Erro ao adicionar entrada no ranking: {e}")
+            
     async def create_leaderboard(self, users_data: list, guild, offset, guild_icon: Optional[str] = None) -> BytesIO:
         """Gera imagem do ranking de usuários"""
         print(users_data)

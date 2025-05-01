@@ -5,6 +5,7 @@ from datetime import datetime
 from discord import Member, TextChannel
 
 logger = logging.getLogger(__name__)
+logger.info("Message (sys) carregado")
 
 class MessageSystem:
 	def __init__(self):

@@ -5,6 +5,7 @@ from discord import app_commands, Member
 import logging
 
 logger = logging.getLogger(__name__)
+logger.info("Basic carregado")
 
 class BasicCommands(BaseCommands):
     
@@ -21,26 +22,26 @@ class BasicCommands(BaseCommands):
 
     @commands.command(name="rep")
     async def rep_prefix(self, ctx, user: Member):
-    	user_id = str(user.id)
-    	user_data = await self.db.get_user_data(user_id)
-    	new = user_data['rep'] +1
-    	await self.db.update_field(user_id, 'rep', new)
-    	
-    	embed = await self.use.create("Reputação enviada com sucesso!", f"{ctx.author.mention} enviou uma rep a {user.mention}")
-    	await ctx.send(embed=embed)
-    	
+        user_id = str(user.id)
+        user_data = await self.db.get_user_data(user_id)
+        new = user_data['rep'] +1
+        await self.db.update_field(user_id, 'rep', new)
+        
+        embed = await self.use.create("Reputação enviada com sucesso!", f"{ctx.author.mention} enviou uma rep a {user.mention}")
+        await ctx.send(embed=embed)
+        
     @commands.command(name="ajuda", aliases=["help", "s", 'search'])
     async def help_prefix(self, ctx, text: str = "basic"):
-        	
+            
         embed= await self.use.create("**Comandos Disponíveis:**", self.ht.textos[text])
         embed.set_footer(text=f"Requisitado por {ctx.author.name}")
         await ctx.send(embed= embed)
         
     @app_commands.command(name="help", description="Exibe a lista de comandos")
     async def help_slash(self, interaction, text: str = "basic"):
-    	embed= await self.use.create("**Comandos Disponíveis:**", self.ht.textos[text])
-    	embed.set_footer(text=f"Requisitado por {interaction.user.name}")
+        embed= await self.use.create("**Comandos Disponíveis:**", self.ht.textos[text])
+        embed.set_footer(text=f"Requisitado por {interaction.user.name}")
         
-    	await interaction.response.send_message(embed= embed)
+        await interaction.response.send_message(embed= embed)
 
 # Implementação similar para help

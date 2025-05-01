@@ -8,6 +8,8 @@ import pathlib
 import json
 import asyncio
 
+logger = logging.getLogger(__name__)
+logger.info("Channel carregado")
 class ChannelSystem:
     def __init__(self, arquivo: str = 'canais.json'):
         self.arquivo = pathlib.Path(arquivo)

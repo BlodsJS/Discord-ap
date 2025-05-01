@@ -7,7 +7,7 @@ import discord
 from discord.ext import commands
 from config import Config
 from cogs import setup as setup_cogs
-print("Diretu00f3rio atual:", os.getcwd())
+os_path_bc = os.getcwd()
 
 # Configurau00e7u00e3o bu00e1sica de logging
 logging.basicConfig(
@@ -16,7 +16,7 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 logger = logging.getLogger('bot.main')
-
+logger.info(f"Diretu00f3rio atual: {os_path_bc}" )
 
 class Bot(commands.Bot):
     def __init__(self):
@@ -57,7 +57,7 @@ class Bot(commands.Bot):
         """Bot startup handler"""
         logger.info(f'Conectado como: {self.user.name} | ID: {self.user.id}')
         logger.info(f'Latu00eancia: {round(self.latency * 1000)}ms')
-        await self.change_presence(activity=discord.Game(name="Inicializando..."))
+        
 
     async def close(self) -> None:
         """Clean shutdown procedure"""
@@ -99,7 +99,7 @@ async def main():
     except Exception as e:
         logger.error(f"Erro cru00edtico: {e}")
     finally:
-        if not bot.is_closed():
+        if not bot.is_close():
             await bot.close()
 
 if __name__ == "__main__":

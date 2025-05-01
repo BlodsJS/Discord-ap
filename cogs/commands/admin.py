@@ -8,7 +8,7 @@ import re
 import logging
 
 logger = logging.getLogger(__name__)
-
+logger.info("Admin carregado")
 class AdminCommands(BaseCommands):
     
     @commands.command(name="addchannel", aliases=["ac", "add channel"])
@@ -32,10 +32,11 @@ class AdminCommands(BaseCommands):
                 await ctx.send(embed=embed)
                 return
             field= "text"
-    	   
+           
         sucess = await self.c_db.inserir(ctx.guild.id, canal.id, field)
         if sucess:
             embed= await self.use.create("Sucesso", f"Canal {canal} adicionado com sucesso a lista")
+            await self.use.arquivo(f"Canal {canal} adicionado com sucesso a lista por {ctx.author}")
             await ctx.send(embed=embed)
         else:
             embed = await self.use.create("Erro:", "Não foi possível adicionar o canal")
@@ -63,36 +64,37 @@ class AdminCommands(BaseCommands):
                 await ctx.send(embed=embed)
                 return
             field = "text"
-    	   
+           
         sucess = await self.db.apagar(ctx.guild.id, canal.id, field)
         if sucess:
             embed = await self.use.create("Sucesso", f"{canal} foi removido da lista")
+            await self.use.arquivo(f"Canal {canal} removido com sucesso da lista por {ctx.author}")
             await ctx.send(embed=embed)
         
     
     @commands.command(name="channel", aliases=["canais", "ch"])
     @commands.has_permissions(administrator=True)
     async def channel_prefix(self, ctx):
-    	canais = [f'<#{cid}>' for cid in self.c_db.get_canais(ctx.guild.id, "text")]
-    	print(canais)
-    	v_canais = [f'<#{cid}>' for cid in self.c_db.get_canais(ctx.guild.id, "voice")]
-    	text = ""
-    	voice =""
-    	for i in canais:
-    		text += f"{i}\n"
-    		
-    	for i in v_canais:
-    	    voice += f"{i}\n"
-    	embed = await self.use.create("Canais:", f"Canais de texto:\n{text}\n\nCanais de voz:\n{voice}")
-    	await ctx.send(embed=embed)
+        canais = [f'<#{cid}>' for cid in self.c_db.get_canais(ctx.guild.id, "text")]
+        print(canais)
+        v_canais = [f'<#{cid}>' for cid in self.c_db.get_canais(ctx.guild.id, "voice")]
+        text = ""
+        voice =""
+        for i in canais:
+            text += f"{i}\n"
+            
+        for i in v_canais:
+            voice += f"{i}\n"
+        embed = await self.use.create("Canais:", f"Canais de texto:\n{text}\n\nCanais de voz:\n{voice}")
+        await ctx.send(embed=embed)
     
     @commands.command(name="update", aliases=["up"])
     @commands.has_permissions(administrator=True)
     async def update_prefix(self, ctx, user: Member, text: str, amount: int):
         if text not in ["xp", "level", "message", "voice", "money", "rep"]:
-        	embed = await self.use.create("Erro: field  não encontrado", f"{ctx.author.mention}, o field {text} não existe, use uma das opçōes abaixo:\n  xp, level, message, voice, money, rep")
-        	await ctx.send(embed=embed)
-        	return
+            embed = await self.use.create("Erro: field  não encontrado", f"{ctx.author.mention}, o field {text} não existe, use uma das opçōes abaixo:\n  xp, level, message, voice, money, rep")
+            await ctx.send(embed=embed)
+            return
         user_id= str(user.id)
         user_data = await self.db.get_user_data(user_id)
         
@@ -121,18 +123,19 @@ class AdminCommands(BaseCommands):
         levels = 0
         i = xp
         if need < xp:
-        	
-	        while need < xp:
-	        	levels +=1
-	        	xp -= need
-	        	new = user_data["xp"] + levels
-	        	taxa = await self.use.obter_taxa(self.processor.inicios, self.processor.fins, self.processor.valores, new)
-	        	need = ((user_data["level"]+levels)**2) *taxa +100
-	        await self.db.increment_level(user_id, levels)
-        	
+            
+            while need < xp:
+                levels +=1
+                xp -= need
+                new = user_data["xp"] + levels
+                taxa = await self.use.obter_taxa(self.processor.inicios, self.processor.fins, self.processor.valores, new)
+                need = ((user_data["level"]+levels)**2) *taxa +100
+            await self.db.increment_level(user_id, levels)
+            
         await self.db.increment_xp(user_id, xp)
         embed = await self.use.create(f"XP adicionado por: {ctx.author.name}", f"✅ {i} XP adicionados para {user.mention}")
-        logger.info(f"XP adicionado por: {ctx.author.name}, para {user.name} ")
+        logger.info(f"XP adicionado por: {ctx.author.name}, para {user.name}")
+        await self.use.registrar_evento(f"XP adicionado por: {ctx.author.name}, para {user.name}")
         await ctx.send(embed=embed)
 
     @commands.command(name="addlevel")
@@ -142,6 +145,7 @@ class AdminCommands(BaseCommands):
         await self.db.increment_level(user_id, level)
         embed = await self.use.create(f"Level adicionado por {ctx.author.mention}", f"✅ {level} level adicionados para {user.mention}")
         logger.info(f"Level adicionado por: {ctx.author.name}, para {user.name} ")
+        await self.use.registrar_evento(f"Level adicionado por: {ctx.author.name}, para {user.name}")
         await ctx.send(embed=embed)
         
     @commands.command(name="removexp")
@@ -151,7 +155,7 @@ class AdminCommands(BaseCommands):
         user_data = await self.db.get_user_data(user_id)
         i = xp
         if user_data["xp"] < xp:
-        	xp = user_data["xp"] - user_data["xp"] +1
+            xp = user_data["xp"] - user_data["xp"] +1
         await self.db.retirar_xp(user_id, xp)
         embed = await self.use.create(f"XP removido por {ctx.author.mention}", f"✅ {i} XP removidos para {user.mention}")
         logger.info(f"XP removido por: {ctx.author.name}, de {user.name} ")
@@ -164,7 +168,7 @@ class AdminCommands(BaseCommands):
         user_data = await self.db.get_user_data(user_id)
         i = level
         if user_data["level"] < level:
-        	level = user_data["level"] - user_data["level"] +1
+            level = user_data["level"] - user_data["level"] +1
         await self.db.retirar_level(user_id, level)
         embed= await self.use.create(f"Level removido por {ctx.author.mention}", f"✅ {i} level removidos para {user.mention}")
         logger.info(f"Level removido por: {ctx.author.name}, de {user.name} ")
@@ -174,28 +178,28 @@ class AdminCommands(BaseCommands):
     @commands.has_permissions(administrator=True)
     async def reset_prefix(self, ctx, target: typing.Union[discord.Member, str] = None):
          if not target:
-         	embed= await self.use.create(f"Erro: comando requisitado por {ctx.author.mention}", "⚠️ Especifique um usuário (`@usuário`) ou `all` para resetar todos.")
-         	await ctx.send(embed=embed)
-         	return
-         	
+             embed= await self.use.create(f"Erro: comando requisitado por {ctx.author.mention}", "⚠️ Especifique um usuário (`@usuário`) ou `all` para resetar todos.")
+             await ctx.send(embed=embed)
+             return
+             
          if isinstance(target, Member):  # Resetar um usuário específico
-         	user_id = str(target.id)
-         	result = await self.db.reset_user(user_id)
-         	embed = await self.use.create(f"Membro resetado por {ctx.author.mention}", f"✅ {target.mention} foi resetado: {result}")
-         	logger.info(f"Membro resetado por {ctx.author.name}, membro resetado: {target.name}")
-         	await ctx.send(embed=embed)
-         	
+             user_id = str(target.id)
+             result = await self.db.reset_user(user_id)
+             embed = await self.use.create(f"Membro resetado por {ctx.author.mention}", f"✅ {target.mention} foi resetado: {result}")
+             logger.info(f"Membro resetado por {ctx.author.name}, membro resetado: {target.name}")
+             await ctx.send(embed=embed)
+             
          elif target.lower() == "all":  # Resetar todos
-         	affected = await self.db.reset_xp()
-         	embed = await self.use.create(f"XP resetado por {ctx.author.mention}", f"✅ Todos os usuários foram resetados! ({affected} afetados)")
-         	logger.info(f"Todos os usuarios foram resetados por {ctx.author.name}")
-         	await ctx.send(embed=embed)
-         	
+             affected = await self.db.reset_xp()
+             embed = await self.use.create(f"XP resetado por {ctx.author.mention}", f"✅ Todos os usuários foram resetados! ({affected} afetados)")
+             logger.info(f"Todos os usuarios foram resetados por {ctx.author.name}")
+             await ctx.send(embed=embed)
+             
          else:
-         	embed= await self.use.create(f"Erro: comando requisitado por {ctx.author.mention}", "⚠️ Alvo inválido. Use `@usuário` ou `all`.")
-         	await ctx.send(embed=embed)
-    	
-    	
+             embed= await self.use.create(f"Erro: comando requisitado por {ctx.author.mention}", "⚠️ Alvo inválido. Use `@usuário` ou `all`.")
+             await ctx.send(embed=embed)
+        
+        
     #barras
     @app_commands.command(name="addxp", description="Adiciona XP a um usuário")
     @app_commands.describe(user="Usuário", xp="Quantidade de XP")
@@ -209,17 +213,17 @@ class AdminCommands(BaseCommands):
         levels = 0
         i = xp
         if need < xp:
-        	
-	        while need < xp:
-	        	levels +=1
-	        	xp -= need
-	        	new = user_data["xp"] + levels
-	        	taxa = await self.use.obter_taxa(self.processor.inicios, self.processor.fins, self.processor.valores, new)
-	        	need = ((user_data["level"]+levels)**2) *taxa +100
-	        	
-	        print(levels)
-	        await self.db.increment_level(user_id, levels)
-        	
+            
+            while need < xp:
+                levels +=1
+                xp -= need
+                new = user_data["xp"] + levels
+                taxa = await self.use.obter_taxa(self.processor.inicios, self.processor.fins, self.processor.valores, new)
+                need = ((user_data["level"]+levels)**2) *taxa +100
+                
+            print(levels)
+            await self.db.increment_level(user_id, levels)
+            
         await self.db.increment_xp(user_id, xp)
         embed = await self.use.create(f"XP adicionado por:{interaction.user.mention}", f"✅ {i} XP adicionados para {user.mention}")
         logger.info(f"XP adicionado por:{interaction.user.name}, para {user.name}")
@@ -244,7 +248,7 @@ class AdminCommands(BaseCommands):
         user_data = await self.db.get_user_data(user_id)
         i = xp
         if user_data["xp"] < xp:
-        	xp = user_data["xp"] - user_data["xp"] +1
+            xp = user_data["xp"] - user_data["xp"] +1
         await self.db.retirar_xp(user_id, xp)
         embed = await self.use.create(f"XP removido por{interaction.user.mention}", f"✅ {i} XP removidos para {user.mention}")
         logger.info(f"XP removido por:{interaction.user.name}, de {user.name}")
@@ -258,7 +262,7 @@ class AdminCommands(BaseCommands):
         user_data = await self.db.get_user_data(user_id)
         i = level
         if user_data["level"] < level:
-        	level = user_data["level"] - user_data["level"] +1
+            level = user_data["level"] - user_data["level"] +1
         await self.db.retirar_level(user_id, level)
         embed= await self.use.create(f"Level removido por {interaction.user.mention}", f"✅ {i} level removidos para {user.mention}")
         logger.info(f"Level removido por:{interaction.user.name}, de {user.name}")
@@ -267,33 +271,33 @@ class AdminCommands(BaseCommands):
     @app_commands.command(name="reset", description="reseta um user ou todos")
     @app_commands.describe(target="alvo")
     @app_commands.checks.has_permissions(administrator=True)
-    async def reset_slash(self, interaction, target: Member or str = None):
+    async def reset_slash(self, interaction, target: Member = None):
         if not target:
-         	embed= await self.use.create(f"Erro: comando requisitado por {interaction.user.mention}", "⚠️ Especifique um usuário (`@usuário`) ou `all` para resetar todos.")
-         	await interaction.response.send_message(embed=embed)
-         	return
-        	
+             embed= await self.use.create(f"Erro: comando requisitado por {interaction.user.mention}", "⚠️ Especifique um usuário (`@usuário`) ou `all` para resetar todos.")
+             await interaction.response.send_message(embed=embed)
+             return
+            
         if target.lower() == "all":
-        	affected = await self.db.reset_xp()
-        	embed = await self.use.create(f"XP resetado por {interaction.user.mention}", f"✅ Todos os usuários foram resetados! ({affected} afetados)")
-        	logger.info(f"Todos os XP resetados por {interaction.user.name}")
-        	await interaction.response.send_message(embed=embed)
-        	return
+            affected = await self.db.reset_xp()
+            embed = await self.use.create(f"XP resetado por {interaction.user.mention}", f"✅ Todos os usuários foram resetados! ({affected} afetados)")
+            logger.info(f"Todos os XP resetados por {interaction.user.name}")
+            await interaction.response.send_message(embed=embed)
+            return
         match = re.match(r'<@!?(\d+)>', target)
         if match:
-        	user_id = int(match.group(1))
-        	member = interaction.guild.get_member(user_id)
-        	if member:
-        		result = await self.db.reset_user(str(user_id))
-        		embed = await self.use.create(f"Membro resetado por {interaction.user.mention}", f"✅ {target.mention} foi resetado: {result}")
-        		logger.info(f"Membro resetado por {interaction.user.name}, membro resetado: {target.name}")
-        		await interaction.response.send_message(embed=embed)
-        		return
+            user_id = int(match.group(1))
+            member = interaction.guild.get_member(user_id)
+            if member:
+                result = await self.db.reset_user(str(user_id))
+                embed = await self.use.create(f"Membro resetado por {interaction.user.mention}", f"✅ {target.mention} foi resetado: {result}")
+                logger.info(f"Membro resetado por {interaction.user.name}, membro resetado: {target.name}")
+                await interaction.response.send_message(embed=embed)
+                return
         else:
-        	embed= await self.use.create(f"Erro: comando requisitado por {interaction.user.mention}", "⚠️ Alvo inválido. Use `@usuário` ou `all`.")
-        	await interaction.response.send_message(embed=embed)
-        	return
-        	
+            embed= await self.use.create(f"Erro: comando requisitado por {interaction.user.mention}", "⚠️ Alvo inválido. Use `@usuário` ou `all`.")
+            await interaction.response.send_message(embed=embed)
+            return
+            
     @commands.command(name="ban")
     @commands.has_permissions(administrator=True)
     async def ban_prefix(self, ctx, user: Member, reason: str = ""):
@@ -305,6 +309,6 @@ class AdminCommands(BaseCommands):
     @app_commands.describe(target="alvo")
     @app_commands.checks.has_permissions(administrator=True)
     async def ban_slash(self, interaction, target: Member, reason: str = ""):
-    	embed = await self.use.create("Comando de ban", "Em desenvolvimento")
-    	
-    	await interaction.response.send_message(embed=embed)
+        embed = await self.use.create("Comando de ban", "Em desenvolvimento")
+        
+        await interaction.response.send_message(embed=embed)

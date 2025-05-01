@@ -2,12 +2,12 @@
 import aiosqlite
 import logging
 from typing import Optional, Dict, Any, AsyncContextManager, List
+from easy_pil import Editor, Canvas, Font, load_image_async
 import cachetools
 import asyncio
 import discord
 
 logger = logging.getLogger(__name__)
-
 
 class DatabaseManager:
     _instance = None
@@ -83,6 +83,7 @@ class DatabaseManager:
         """
         try:
             result = await self._execute_query(query, (value, user_id))
+            logger.info(f"sucesso ao atualizar {field} para {user_id}")
             return True
         except Exception as e:
             logger.error(f"Falha ao atualizar {field} para {user_id}: {e}")
@@ -128,7 +129,7 @@ class DatabaseManager:
         return await self.update_field(user_id, 'level', new_level)
 
     # Mu00e9todo completo para atualizau00e7u00e3o complexa
-    async def full_update_user(self, user_id: str, **fields) -> bool:
+    async def efull_update_user(self, user_id: str, **fields) -> bool:
         await self.connect()
         allowed_fields = {'xp', 'level', 'message', 'voice'}
         updates = []
@@ -170,21 +171,22 @@ class DatabaseManager:
                     "rep": row[5]
                 }
                 return user_data
-            else:
-                async with self.connection.execute(
-                        "INSERT INTO xp_data (user_id, xp, level, message, voice, money, rep) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                        (user_id, 0, 1, 0, 0, 0, 0)
-                ) as cursor:
+            
+            async with self.connection.execute(
+                    "INSERT INTO xp_data (user_id, xp, level, message, voice, money, rep) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    (user_id, 0, 1, 0, 0, 0, 0)
+            ) as cursor:
 
-                    await self.connection.commit()
-                    return {
-                        "xp": 0,
-                        "level": 1,
-                        "message": 0,
-                        "voice": 0,
-                        "money": 0,
-                        "rep": 0
-                    }
+                await self.connection.commit()
+                return {
+                    "xp": 0,
+                    "level": 1,
+                    "message": 0,
+                    "voice": 0,
+                    "money": 0,
+                    "rep": 0
+                }
+                
 
     async def get_user_rank(self, user_id: str) -> int:
         # Primeiro, obtenha os dados do usuu00e1rio
