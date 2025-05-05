@@ -9,12 +9,13 @@ from database import DatabaseManager
 logger = logging.getLogger(__name__)
 logger.info("Level carregado")
 
+
 class LevelSystem:
     def __init__(self, db: DatabaseManager):
         self.db = db
         self.level_messages = {
-            5: "Você deixou de ser um zero... para se tornar um um.",
-            10: "Você é como uma vela na tempestade...",
+            5: "Vocu00ea deixou de ser um zero... para se tornar um um.",
+            10: "Vocu00ea u00e9 como uma vela na tempestade...",
             # ... (adicionar outras mensagens)
         }
 
@@ -52,20 +53,20 @@ class LevelSystem:
         await self.db.increment_xp(user_id, xp_earned)
         return xp_earned
 
-
     async def create_level_up_message(self, member: Member, new_level: int) -> str:
-        base_message = self.level_messages.get(new_level, 
-            f"Parabéns {member.mention}, você alcançou o nível {new_level}!"
-        )
-        
+        base_message = self.level_messages.get(new_level,
+                                               f"Parabu00e9ns {member.mention}, vocu00ea alcanu00e7ou o nu00edvel {
+                                                   new_level}!"
+                                               )
+
         if new_level in [25, 50, 100]:
-            return f"🌟 {base_message}"
+            return f"ud83cudf1f {base_message}"
         return base_message
-        
-    async def get_rank(self, user_id:str) -> int:
+
+    async def get_rank(self, user_id: str) -> int:
         rank = await self.db.get_user_rank(user_id)
         return rank
-        
+
     async def get_data(self, user_id: str):
         user_data = await self.db.get_user_data(user_id)
         return user_data
@@ -75,9 +76,8 @@ class LevelSystem:
         for rank in rank_priority:
             if any(role.name == rank for role in roles):
                 return rank
-        return "Não ranqueado"
+        return "Nu00e3o ranqueado"
 
 # Uso exemplo:
 # level_system = LevelSystem(db_manager)
 # new_level, levels_gained = await level_system.handle_xp_increase(str(user.id))
-

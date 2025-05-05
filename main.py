@@ -16,7 +16,8 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 logger = logging.getLogger('bot.main')
-logger.info(f"Diretu00f3rio atual: {os_path_bc}" )
+logger.info(f"Diretu00f3rio atual: {os_path_bc}")
+
 
 class Bot(commands.Bot):
     def __init__(self):
@@ -57,7 +58,6 @@ class Bot(commands.Bot):
         """Bot startup handler"""
         logger.info(f'Conectado como: {self.user.name} | ID: {self.user.id}')
         logger.info(f'Latu00eancia: {round(self.latency * 1000)}ms')
-        
 
     async def close(self) -> None:
         """Clean shutdown procedure"""

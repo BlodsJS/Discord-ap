@@ -6,6 +6,7 @@ from utils.help_text import TextSystem
 from utils.channel_system import ChannelSystem
 from utils.level_system import LevelSystem
 
+
 class BaseCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -15,4 +16,3 @@ class BaseCommands(commands.Cog):
         self.use = UsefulSystem()
         self.ht = TextSystem()
         self.c_db = ChannelSystem()
-
