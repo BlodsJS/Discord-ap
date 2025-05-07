@@ -69,7 +69,7 @@ class DatabaseManager:
                 raise
 
     # Mu00e9todo genu00e9rico seguro para atualizau00e7u00f5es
-    async def update_field(self, user_id: str, field: str, value: Any) -> bool:
+    async def updater_field(self, user_id: str, field: str, value: Any) -> bool:
         await self.connect()
         allowed_fields = {'xp', 'level', 'message', 'voice', 'money', 'rep'}
         if field not in allowed_fields:
@@ -88,8 +88,37 @@ class DatabaseManager:
         except Exception as e:
             logger.error(f"Falha ao atualizar {field} para {user_id}: {e}")
             return False
+          
+    async def update_field(self, user_id: str, field: str, value: Any) -> bool:
+        await self.connect()
+        allowed_fields = {'xp', 'level', 'message', 'voice', 'money', 'rep'}
+        if field not in allowed_fields:
+            raise ValueError(f"Campo invu00e1lido: {
+                             field}. Permitidos: {allowed_fields}")
+        if field == "voice":
+            value = value*60
+
+        query = f"""
+            UPDATE xp_data
+            SET {field} = ?
+            WHERE user_id = ?
+        """
+        try:
+            result = await self._execute_query(query, (value, user_id))
+            logger.info(f"sucesso ao atualizar {field} para {user_id}")
+            return True
+        except Exception as e:
+            logger.error(f"Falha ao atualizar {field} para {user_id}: {e}")
+            return False
 
     # Mu00e9todos especu00edficos para melhor legibilidade
+    async def increment_voice(self, user_id: str, amount: int) -> bool:
+        await self.connect()
+        return await self._execute_query(
+            "UPDATE xp_data SET voice = voice + ? WHERE user_id = ?",
+            (amount, user_id)
+        )
+      
     async def increment_xp(self, user_id: str, amount: int) -> bool:
         await self.connect()
         return await self._execute_query(

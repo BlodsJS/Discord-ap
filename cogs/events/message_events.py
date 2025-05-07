@@ -21,6 +21,8 @@ class MessageEvents(BaseEventCog):
                 return
             if self.cooldown_cache.get(user_id):
                 return
+            if self.use.has_role(ctx.member, 1347726055892455504):
+                return
                 
             try:
                 await self.db.increment_xp(user_id, 13)

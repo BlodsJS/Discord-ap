@@ -6,6 +6,7 @@ from discord import Member, TextChannel
 import bisect
 from datetime import datetime
 import pathlib
+import json
 
 logger = logging.getLogger(__name__)
 logger.info("Useful carregado")
@@ -37,3 +38,19 @@ class UsefulSystem:
         linha = f"[{timestamp}] {texto}\n"
         with open(arquivo, "a", encoding="utf-8") as f:
             f.write(linha)
+        
+    async def has_role(member, role_id):
+        user_role_ids = [role.id for role in member.roles]
+        return role_id in user_role_ids
+
+    def get_roles():
+        with open("cargos.json") as f:
+            return json.load(f)
+
+    async def add_role(self, member, role_id):
+        role = discord.utils.get(member.guild.roles, id= role_id)
+        await member.add_roles(role)
+
+    async def remove_role(self, member, role_id):
+        role = discord.utils.get(member.guild.roles, id= role_id)
+        await member.remove_roles(role)

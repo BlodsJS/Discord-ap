@@ -32,8 +32,8 @@ class VoiceEvents(BaseEventCog):
             entry_time = self.voice_sessions.pop(user_id, None)
             if entry_time:
                 time_spent = (now - entry_time).total_seconds()
-                new = int(user_data["voice"] + time_spent)
-                await self.db.update_field(user_id, "voice", new)
+                #await self.db.update_field(user_id, "voice", new)
+                await self.db.increment_voice(user_id, time_spent)
                 xp_earned = int(time_spent/60)
                 await self.db.increment_xp(user_id, xp_earned)
                 logger.info(f"XP de voz concedido: {member} - {xp_earned} XP, por ficar {time_spent} segundos em Call")

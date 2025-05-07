@@ -88,6 +88,29 @@ class AdminCommands(BaseCommands):
             voice += f"{i}\n"
         embed = await self.use.create("Canais:", f"Canais de texto:\n{text}\n\nCanais de voz:\n{voice}")
         await ctx.send(embed=embed)
+
+    @commands.command(name="updateremove", aliases=["upr"])
+    @commands.has_permissions(administrator=True)
+    async def updater_prefix(self, ctx, user: Member, text: str, amount: int):
+        if text not in ["xp", "level", "message", "voice", "money", "rep"]:
+            embed = await self.use.create("Erro: field  não encontrado", f"{ctx.author.mention}, o field {text} não existe, use uma das opçōes abaixo:\n  xp, level, message, voice, money, rep")
+            await ctx.send(embed=embed)
+            return
+            embed = await self.use.create("Erro: field  nu00e3o encontrado", f"{ctx.author.mention}, o field {text} nu00e3o existe, use uma das opu00e7u014des abaixo:\n  xp, level, message, voice, money, rep")
+            await ctx.send(embed=embed)
+            return
+        user_id = str(user.id)
+        user_data = await self.db.get_user_data(user_id)
+        if text == "voice":
+           amount = amount*60
+
+        value = user_data[text] - amount
+        if amount > user_data[text]:
+            value = 1
+        await self.db.updater_field(user_id, text, value)
+        embed = await self.use.create(f"{text} foi atualizado por {ctx.author.mention}", f"{amount} foi removido de {user.name}")
+        await ctx.send(embed=embed)
+      
     @commands.command(name="update", aliases=["up"])
     @commands.has_permissions(administrator=True)
     async def update_prefix(self, ctx, user: Member, text: str, amount: int):
@@ -148,6 +171,20 @@ class AdminCommands(BaseCommands):
         await self.use.registrar_evento(f"Level adicionado por: {ctx.author.name}, para {user.name}")
         await ctx.send(embed=embed)
 
+    @commands.command(name="addrole", aliases=["addcargo", "add cargo"])
+    @commands.has_permissions(administrator=True)
+    async def addrole_prefix(self, ctx, user: Member, role: Union[discord.Role, int]):
+        if isinstance(role, int):
+            sucess = await self.use.add_role(user, role)
+            embed = await self.use.create("Cargo adicionado", "provavelmente certo")
+
+          
+            await ctx.send(embed=embed)
+            return
+        sucess = await user.add_roles(role)
+        embed= await self.use.create("cargo adicionado", "metodo tradicional")
+        await ctx.send(embed=embed)
+      
     @commands.command(name="removexp")
     @commands.has_permissions(administrator=True)
     async def removexp_prefix(self, ctx, user: Member, xp: int):
