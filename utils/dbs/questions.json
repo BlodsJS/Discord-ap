@@ -1,0 +1,152 @@
+[
+  {
+    "id": "Q1",
+    "text": "Quando você enfrenta um desafio emocional, como costuma reagir?",
+    "options": [
+        "Tendo uma abordagem prática, busco resolver a situação o mais rápido possível para voltar ao equilíbrio.",
+        "Tento entender profundamente as causas emocionais por trás do desafio antes de reagir, como uma forma de aprender com a experiência.",
+        "Eu me afasto para refletir e entender meus sentimentos, evitando agir impulsivamente.",
+        "Enfrento o problema de cabeça erguida, acreditando que qualquer situação difícil pode ser superada com força de vontade."
+    ]
+  },
+  {
+    "id": "Q2",
+    "text": "Quando o crepúsculo cai, qual sensação te inspira a seguir adiante?",
+    "options": [
+        "Eu busco registrar o momento, seja em fotos ou em palavras, para preservá-lo de alguma forma.",
+        "Vivo intensamente, absorvendo cada detalhe do que está acontecendo, sem me preocupar em capturar ou registrar.",
+        "Prefiro observar o momento de maneira calma e reflexiva, ponderando sobre seu significado.",
+        "Tento me afastar da emoção e observar o momento de uma perspectiva mais racional, sem deixar que a intensidade me domine."
+    ]
+  },
+  {
+    "id": "Q3",
+    "text": "Ao tomar decisões importantes, você se considera mais guiado por sua razão ou por suas emoções?",
+    "options": [
+        "Minha razão é sempre minha maior guia, pois acredito que a lógica é a única maneira confiável de tomar decisões acertadas.",
+        "Costumo seguir minhas emoções, acreditando que minha intuição me guia para as escolhas mais alinhadas com minha essência.",
+        "Tento equilibrar ambos, analisando com a razão, mas permitindo que minhas emoções também tenham voz na decisão.",
+        "Não confio nem totalmente na razão nem nas emoções, e prefiro tomar decisões impulsivas, seguindo o fluxo da vida."
+    ]
+  },
+  {
+    "id": "Q4",
+    "text": "O que sabemos é uma gota, o que ignoramos é um oceano.* (Isaac Newton): Tem mais para saber sobre você ou o mundo?",
+    "options": [
+        "Eu acredito que há muito mais sobre o mundo que ainda não compreendemos e que o conhecimento exterior é o que realmente importa.",
+        "Para mim, a maior descoberta é sobre mim mesmo, pois é a partir de meu entendimento interno que posso verdadeiramente compreender o mundo ao redor.",
+        "Acredito que as duas áreas estão profundamente conectadas, e tanto o mundo externo quanto o conhecimento interno são igualmente importantes para o crescimento pessoal",
+        "Eu me sinto perdido entre essas duas dimensões e, por vezes, questiono se algum dia conseguirei compreender alguma delas completamente."
+    ]
+  },
+  {
+    "id": "Q5",
+    "text": "Se você fosse responsável por uma sociedade, qual princípio ético guiaria suas ações?",
+    "options": [
+        "Justiça, garantindo que todos tenham direitos iguais e que as desigualdades sejam corrigidas com políticas eficazes.",
+        "Liberdade, permitindo que cada indivíduo possa escolher seu caminho sem interferências externas.",
+        "Felicidade, focando no bem-estar coletivo e buscando maneiras de promover uma vida mais plena para todos.",
+        "Conhecimento, promovendo uma sociedade em que a educação e a reflexão sejam as bases para o progresso."
+    ]
+  },
+  {
+    "id":  "Q6",
+    "text": "Como você lida com os erros cometidos no passado?",
+    "options": [
+        "Tento aprender com eles e usar essas lições para tomar decisões mais sábias no futuro.",
+        "Sinto arrependimento por eles, mas também aceito que fazem parte do processo de crescimento.",
+        "Tento esquecer os erros e seguir em frente, acreditando que o passado não deve ditar minhas ações futuras.",
+        "Reflito profundamente sobre eles, e, em alguns casos, sinto que os erros são parte do que me define como pessoa."
+    ]
+  },
+  {
+    "id":  "Q7",
+    "text": "O homem é a medida de todas as coisas.* (Protágoras) Você acha que o indivíduo tem poder para moldar a realidade?",
+    "options": [
+        "Sim, acredito que o ser humano tem o poder de transformar o mundo ao redor com sua vontade e ações.",
+        "Não, acredito que o mundo é maior do que qualquer indivíduo e que nossas ações são apenas pequenas reações a forças externas.",
+        "Acredito que há um equilíbrio entre as duas forças: podemos moldar nossa realidade até certo ponto, mas não temos controle total sobre o que nos cerca.",
+        "Não tenho certeza, pois frequentemente sinto que as circunstâncias fora do meu controle ditam mais minha vida do que minhas próprias escolhas."
+    ]
+  },
+  {
+    "id":  "Q8",
+    "text": "Como você percebe o papel das emoções no processo de decisão?",
+    "options": [
+        "Eu considero as emoções fundamentais, pois acredito que elas são a base de muitas decisões instintivas e acertadas.",
+        "Eu prefiro não envolver as emoções nas decisões, pois acredito que a razão deve ser a única guia confiável.",
+        "Tento balancear as emoções e a razão, sabendo que ambas têm seu papel, mas sem deixar uma sobrepujar a outra.",
+        "Frequentemente, vejo minhas emoções como um obstáculo nas decisões, preferindo tomar ações mais frias e calculadas."
+    ]
+  },
+  {
+    "id":  "Q9",
+    "text": "A felicidade é um estado de espírito, não um estado de circunstância.* (Buddha) Quando você sente real felicidade?",
+    "options": [
+        "Quando tenho controle sobre minha vida e minhas circunstâncias, sabendo que tudo está em seu devido lugar.",
+        "Quando consigo vivenciar momentos de conexão profunda com outras pessoas ou com a natureza, onde tudo parece se alinhamento.",
+        "Quando tenho liberdade para explorar minha criatividade e buscar novos caminhos sem limitações.",
+        "Quando estou em paz comigo mesmo, aceitando tanto minhas falhas quanto minhas virtudes, sem buscar aprovação externa."
+    ]
+  },
+  {
+    "id":  "Q10",
+    "text": "Quando se sente em crise, o que mais te ajuda a encontrar equilíbrio novamente?",
+    "options": [
+        "A introspecção profunda e a reflexão, buscando entender a raiz da crise e os meios de superá-la.",
+        "A interação com pessoas próximas, que me oferecem conselhos e apoio para superar o momento difícil.",
+        "A busca por soluções práticas, enfrentando o problema de maneira objetiva e eficaz.",
+        "O afastamento temporário da crise, tentando deixar o tempo agir para que as coisas se resolvam por si mesmas."
+    ]
+  },
+  {
+    "id":  "Q11",
+    "text": "Se você pudesse voltar no tempo e corrigir uma ação, qual seria sua escolha?",
+    "options": [
+        "Corrigiria um erro em relação a uma decisão importante que me afetou diretamente.",
+        "Mudaria a maneira como me relacionei com outras pessoas, buscando ser mais compreensivo e cuidadoso.",
+        "Tentaria fazer as coisas de uma forma diferente, com mais coragem e ousadia para enfrentar as adversidades.",
+        "Não mudaria nada, pois acredito que cada erro tem sua razão de ser e que tudo é parte de um aprendizado contínuo."
+    ]
+  },
+  {
+    "id":  "Q12",
+    "text": "Quando você pensa na natureza e em seu papel no mundo, como a vê?",
+    "options": [
+        "Vejo a natureza como algo que deve ser protegido e preservado a todo custo, pois sem ela, nossa existência não teria sentido.",
+        "Eu a vejo como uma força incontrolável e indiferente, onde a vida é apenas um ciclo natural de nascimento e morte.",
+        "Vejo a natureza como um reflexo de nossa própria evolução, um espelho de nossas escolhas e ações.",
+        "Acredito que nossa relação com a natureza deve ser de harmonia, respeitando seus ciclos e adaptando-nos às suas leis, sem tentar dominá-la."
+    ]
+  },
+  {
+    "id":  "Q13",
+    "text": "O que você busca mais em um relacionamento?",
+    "options": [
+        "Conexão intelectual profunda, onde ambos possam aprender e crescer juntos.",
+        "Companheirismo emocional, onde a compreensão e o apoio mútuo são as bases da relação.",
+        "Liberdade e independência, onde ambos possam se apoiar sem perder sua autonomia.",
+        "Intimidade física e química, onde a atração e a conexão física são as forças principais da relação."
+    ]
+  },
+  {
+    "id":  "Q14",
+    "text": "Penso, logo existo.* (René Descartes) Você acredita que a consciência é o que define nossa existência?",
+    "options": [
+        "Sim, acredito que a consciência é a chave para entendermos nossa identidade e nosso propósito no mundo.",
+        "Não, acredito que nossa existência é determinada por nossas ações e pelas experiências que vivemos, mais do que por nossa capacidade de refletir.",
+        "Eu vejo a consciência como uma das muitas facetas da existência, mas não necessariamente a mais importante.",
+        "Não sei, já que, em muitos momentos, sinto que a consciência pode ser uma ilusão ou um reflexo de algo maior que não consigo compreender."
+    ]
+  },
+  {
+    "id":  "Q15",
+    "text": "Se você pudesse ser imortal, o que faria com o tempo infinito que teria?",
+    "options": [
+        "Eu buscaria aprender tudo o que fosse possível, explorando todas as áreas do conhecimento e vivendo inúmeras experiências.",
+        "Eu tentaria ajudar a humanidade a evoluir, usando meu tempo para promover mudanças significativas e duradouras.",
+        "Eu provavelmente me afastaria do mundo, buscando paz interior e tentando compreender a essência do ser.",
+        "Eu viveria de forma simples, aproveitando os momentos e buscando prazer e satisfação pessoal, sem pressa de alcançar nada."
+    ]
+  }
+]

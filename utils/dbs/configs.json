@@ -1,0 +1,83 @@
+{
+	"users": {
+		"admin": []
+	},
+	"roles": {
+		"amplifier": {
+            "bezirk_booster":{
+                "role": 1378833871306625055,
+                "effect": 0.2
+            },
+            "bezirk_maroto": {
+                "role": 1378828848657072128,
+                "effect": 0.5
+            }
+		},
+		"no_xp": 1378828943758463101,
+        "level": {
+            "100": 1378828850838114414,
+            "85": 1378828851861393491,
+            "70": 1378828853308559471,
+            "65": 1378828854348611775,
+            "50": 1378828854944202896,
+            "40": 1378828855942447176,
+            "30": 1378828857389617213,
+            "25": 1378828858337529916,
+            "20": 1378828859260276926,
+            "15": 1378828861323608124,
+            "10": 1378828862464589886,
+            "5":  1378828863244730499
+        }
+	},
+	"events": {
+		"member_join": {
+			"msg": [
+              "Ah, um recém-chegado.",
+              "No Império Bezirk, a diversão é um conceito particular.",
+              "Que sua presença não seja mais uma de minhas decepções milenares."
+            ],
+			"channel": 1378829047370612746
+		},
+		"member_left": {
+			"msg": "msg",
+			"channel": 29388482
+		},
+		"warn_spam": {
+			"msg": "msg"
+		},
+		"warn_img": {
+			"msg": "msg"
+		},
+		"warn_link": {
+			"msg": "msg"
+		},
+		"command_not_found": {
+			"msg": "msg"
+		},
+		"log": {
+			"channel": 1378828998921945339
+		}
+	},
+	"timers": {
+		"rep": {
+			"seconds": 3600
+		},
+		"edit": {
+			"seconds": 60
+		},
+		"work": {
+			"seconds": 3600
+		},
+        "ping": {
+            "seconds": 60
+        }
+	},
+    "houses": {
+        "Leonipards": 1378828845439778988,
+        "Corbusier": 1378828844479549521,
+        "Vildjharta": 1378828846593347775,
+        "Synexa": 1378828847482667168,
+        "level_test": 25
+    }
+	
+}

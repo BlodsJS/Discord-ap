@@ -1,0 +1,10 @@
+{
+  "users": "usuarios",
+  "roles": "cargos",
+  "events": "eventos",
+  "timers": "temporizadores",
+  "houses": "casas",
+  "usarios": "users",
+  "cargos": "roles",
+  "eventos": "events"
+}

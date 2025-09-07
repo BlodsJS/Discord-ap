@@ -1,0 +1,8 @@
+aiohttp
+aiosqlite
+aiofiles
+discord.py
+cachetools
+easy-pil
+Pillow
+dotenv

@@ -1,0 +1,92 @@
+{
+    "q1": {
+        "A": "Leonipards",
+        "B": "Synexa",
+        "C": "Vildjharta",
+        "D": "Corbusier"
+    },
+    "q2": {
+        "A": "Corbusier",
+        "B": "Leonipards",
+        "C": "Synexa",
+        "D": "Vildjharta"
+    },
+    "q3": {
+        "A": "Synexa",
+        "B": "Leonipards",
+        "C": "Vildjharta",
+        "D": "Corbusier"
+    },
+    "q4": {
+        "A": "Leonipards",
+        "B": "Corbusier",
+        "C": "Vildjharta",
+        "D": "Synexa"
+    },
+    "q5": {
+        "A": "Leonipards",
+        "B": "Vildjharta",
+        "C": "Synexa",
+        "D": "Corbusier"
+    },
+    "q6": {
+        "A": "Vildjharta",
+        "B": "Synexa",
+        "C": "Corbusier",
+        "D": "Leonipards"
+    },
+    "q7": {
+        "A": "Corbusier",
+        "B": "Synexa",
+        "C": "Vildjharta",
+        "D": "Leonipards"
+    },
+    "q8": {
+        "A": "Synexa",
+        "B": "Vildjharta",
+        "C": "Leonipards",
+        "D": "Corbusier"
+    },
+    "q9": {
+        "A": "Corbusier",
+        "B": "Synexa",
+        "C": "Vildjharta",
+        "D": "Leonipards"
+    },
+    "q10": {
+        "A": "Corbusier",
+        "B": "Synexa",
+        "C": "Vildjharta",
+        "D": "Leonipards"
+    },
+    "q11": {
+        "A": "Corbusier",
+        "B": "Synexa",
+        "C": "Leonipards",
+        "D": "Vildjharta"
+    },
+    "q12": {
+        "A": "Leonipards",
+        "B": "Corbusier",
+        "C": "Vildjharta",
+        "D": "Synexa"
+    },
+    "q13": {
+        "A": "Leonipards",
+        "B": "Synexa",
+        "C": "Vildjharta",
+        "D": "Corbusier"
+    },
+    "q14": {
+        "A": "Leonipards",
+        "B": "Corbusier",
+        "C": "Vildjharta",
+        "D": "Synexa"
+    },
+    "q15": {
+        "A": "Corbusier",
+        "B": "Leonipards",
+        "C": "Vildjharta",
+        "D": "Synexa"
+    }
+}

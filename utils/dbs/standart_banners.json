@@ -1,0 +1,5 @@
+{
+    "banners": ["padrão", "anime"],
+    "padrão": "theme.png",
+    "anime": "anime_theme.png"
+}
