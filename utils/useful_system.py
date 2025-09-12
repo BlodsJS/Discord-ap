@@ -3,6 +3,7 @@ import discord
 from typing import Dict, Tuple, Union
 from datetime import datetime, timedelta
 from discord import Member, TextChannel
+from utils.handlers.dbs_handler import dbs_controler
 import bisect
 from datetime import datetime
 import pathlib
@@ -83,8 +84,8 @@ class UsefulSystem:
                 profiles[user_id] = {}
             
             if field == "theme":
-                banners = self.check_profiles()
-                value = banners.get(value)
+                
+                
                 if value:
                     profiles[user_id][field] = value
                 
@@ -193,18 +194,16 @@ class UsefulSystem:
         return message
 
     async def amplifier_role(self, member):
-        taxa_id = None
-        roles_to_check = [1378828848657072128, 1378833871306625055]
-        for i in roles_to_check:
-            if await self.has_role(member, i):
-                taxa_id = i
-                break
-        roles = self.get_roles()
-        taxa_role = roles.get(str(taxa_id), 0)
-        amplifier = 1
-        if taxa_id is not None:
-            amplifier +=taxa_role     
-        return amplifier
+        
+        roles_to_check = dbs_controler.load_roles("roles")
+        for key in roles_to_check["amplifier"]:
+            
+            if await self.has_role(member, key[0]):
+                amplifier = 1+key[1]
+                
+                return amplifier
+        return 1
+        
 
     async def xp_calc(self, level, taxa):
         xp_needed = (level**2)*taxa +100

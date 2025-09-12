@@ -7,6 +7,7 @@ from utils.image_processor import ImageProcessor
 from utils.channel_system import ChannelSystem
 from utils.help_text import TextSystem
 from utils.handlers.dbs_handler import dbs_controler
+from utils.handlers.level_handler import LevelHandler
 
 class BaseEventCog(commands.Cog):
     def __init__(self, bot):

@@ -41,6 +41,9 @@ async def setup(bot):
     await bot.add_cog(BackgroundTasks(bot))
     logger.info("Tasks System inicializado")
 
+    #teste de carregamento de cogs
+    #await bot.load_extension("cogs.commands.admin_commands")
+
     #adiciono aqui o carregamento das tasks exatamente como os outros cogs
      #passo aqui o cmdTimer
     

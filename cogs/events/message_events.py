@@ -48,9 +48,10 @@ class MessageEvents(BaseEventCog):
             try:
                 member = message.author
                 amplifier = await self.use.amplifier_role(message.author)
+                logger.info(f"amplificador: {amplifier}")
                 xp_to_add = 20*amplifier
                 await self.db.increment_xp(user_id, xp_to_add)
-                print(f"amplificador: {amplifier}")
+                
 
                 #Get user profile and levels
                 
@@ -71,6 +72,7 @@ class MessageEvents(BaseEventCog):
                 self.cooldown_cache[user_id] = True
             except Exception as e:
                 logger.info(f"Erro em mensagem de {message.author} em message_events.py: {e}")
+                
       
      @commands.Cog.listener()
      async def on_message_delete(self, message):

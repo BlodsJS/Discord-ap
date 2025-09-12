@@ -1,0 +1,30 @@
+{
+    "users": {},
+    "roles": {
+        "amplifier": {
+            "name_roles": {
+                "id_role": 298392,
+                "effect": 0.2
+            }
+        },
+        "no_xp": 28832,
+        "level": {
+            "100": 18382,
+            "10": 939829
+        }
+    },
+    "events": {
+        "member_join": {
+            "msg": "msg",
+            "channel": 293992
+        }
+    },
+    "timers": {
+        "command_name": {
+            "seconds": 10
+        }
+    },
+    "channels": {
+        "no_command": []
+    }
+}

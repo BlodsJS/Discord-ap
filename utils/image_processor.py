@@ -99,19 +99,13 @@ class ImageProcessor(utilsPort):
     async def get_house(self, user: Member) -> str:
         if user.id in self.users:
             return self.users[user.id]
-        CASAS = {
-            1378828845439778988: "Leonipards",
-            1378828844479549521: "Corbusier",
-            1378828847482667168: "Synexa",
-            1378828846593347775: "Vildjharta"
-        }
-        
-        role_ids = {role.id for role in user.roles}
-        casa_ids = CASAS.keys()
-        
-        # 3. Encontra a primeira interseção (se existir)
-        casa_encontrada = next((CASAS[role_id] for role_id in role_ids & casa_ids), "cidadao")
-        return casa_encontrada
+        data_houses = dbs_controler.load_house("houses")
+        role_names = [role.name for role in user.roles]
+        for role in user.roles:
+            house_role = data_houses.get(role.name)
+            if house_role:
+                return role.name
+        return "cidadao"
         
     async def create_profile_card(self, user: Member, xp: int, level: int, house: str, rank: int, money, rep) -> BytesIO:
         """Cria o cartão de perfil completo com elementos customizados"""

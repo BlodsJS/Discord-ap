@@ -1,13 +1,13 @@
 import discord
 from utils.handlers.dbs_handler import dbs_controler
-from utils.handlers.roles_handler import roles_controler
+from utils.handlers.roles_handler import roles_controller
 import json
 from pathlib import Path
 
 class ConfigView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
-        self.all_configs = dbs_controler.load_all_configs()
+        self.all_configs = dbs_controller.load_all_configs()
 
         for key in self.all_configs:
             button = discord.ui.Button(

@@ -7,6 +7,8 @@ from utils.channel_system import ChannelSystem
 from utils.level_system import LevelSystem
 from cachetools import TTLCache
 from utils.handlers.dbs_handler import dbs_controler
+from utils.handlers.level_handler import LevelHandler
+from utils.handlers.roles_handler import roles_controller
 
 class BaseCommands(commands.Cog):
     def __init__(self, bot):
@@ -19,3 +21,5 @@ class BaseCommands(commands.Cog):
         self.c_db = ChannelSystem()
         self.cooldown_cache = TTLCache(maxsize=1000, ttl=3600)
         self.db_controler = dbs_controler
+        self.level_controller = LevelHandler
+        self.roles_controller = roles_controller

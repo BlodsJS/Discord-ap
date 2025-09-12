@@ -243,10 +243,13 @@ class ProfileCommands(BaseCommands):
                 "descricao": "desc",
                 "descrição": "desc"
             }
+            
             field = fields.get(field.lower())
+            logger.info(field)
             if field == "theme":
                 banners = self.use.check_profiles()
                 value = banners.get(value)
+                
                 if value == None:
                     embeed = await self.use.create("⚠️", "Esse banner nao existe")
                     await ctx.send(embed=embed)

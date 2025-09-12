@@ -1,7 +1,7 @@
 from . import BaseCommands
 import discord
 from discord.ext import commands
-from discord import app_commands, Member
+from discord import app_commands, Member, Role
 from typing import Union
 import logging
 from easy_pil import load_image_async, Editor
@@ -11,6 +11,18 @@ logger = logging.getLogger(__name__)
 logger.info("Basic carregado")
 
 class BasicCommands(BaseCommands):
+    @commands.command(name="testh")
+    async def test_handler_prefix(self, ctx, member: Member, role: Union[int, Role]):
+        try:
+            if isinstance(role, int):
+                result = await self.roles_controller.has_role(member, role)
+                if result:
+                    embed = await self.use.create("teste de comando", f"{member.mention} tem o cargo {role}")
+                else:
+                    embed = await self.use.create("teste de comando", f"{member.mention} não tem o cargo {role}")
+                await ctx.send(embed=embed)
+        except Exception as e:
+            logger.info(e)
 
     @commands.command(name="ping")
     async def ping_prefix(self, ctx):

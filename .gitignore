@@ -1,2 +1,8 @@
 __pycache__/
 *.py[cod]
+.env
+cargos.json
+configs.json
+tests.json
+users_profile.json
+xp_data.db

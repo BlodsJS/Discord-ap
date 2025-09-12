@@ -2,7 +2,7 @@
 import discord
 from utils.handlers.house_handler import TestHandler
 from utils.handlers.dbs_handler import dbs_controler
-from utils.handlers.roles_handler import roles_controler
+from utils.handlers.roles_handler import roles_controller
 import json
 from pathlib import Path
 
@@ -132,7 +132,7 @@ class TestView(discord.ui.View):
             button = discord.ui.Button(label=house_name, style=discord.ButtonStyle.green)
             async def button_callback(interaction: discord.Interaction, role_id=role_id):
                 member = interaction.guild.get_member(interaction.user.id)
-                await roles_controler.add_role(member, role_id)
+                await roles_controller.add_role(member, role_id)
                 await interaction.response.send_message(
                   f"{member.mention}, você agora pertence à casa {house_name}!", ephemeral=True
                 )
