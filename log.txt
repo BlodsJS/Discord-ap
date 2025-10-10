@@ -151,3 +151,32 @@
 [2025-07-26 13:30:06] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 11000
 [2025-09-06 17:21:58]  level foi atualizado por mr_cristhian, 3 level foi removido de mr_cristhian
 [2025-09-06 17:22:31] level foi atualizado por mr_cristhian, 3level foi adicionado a mr_cristhian
+[2025-09-12 19:19:03] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 20
+[2025-09-13 13:07:04] Level adicionado por: mr_cristhian, para mr_cristhian, levels: 2
+[2025-09-13 13:07:22] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 14700
+[2025-09-13 13:07:46] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 10
+[2025-09-13 13:16:52] Level removido por: mr_cristhian, level removido de mr_cristhian, levels: 1
+[2025-09-13 13:18:26] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 16900
+[2025-09-13 13:23:36] Level adicionado por: mr_cristhian, para mr_cristhian, levels: 4
+[2025-09-13 13:24:12] Level removido por: mr_cristhian, level removido de mr_cristhian, levels: 1
+[2025-09-13 13:24:26] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 23210
+[2025-09-13 13:25:43] Level removido por: mr_cristhian, level removido de mr_cristhian, levels: 8
+[2025-09-13 13:25:56] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 2400
+[2025-09-13 13:49:05] XP removido por mr_cristhian, XP removidos para mr_cristhian, xp: 2400
+[2025-09-13 13:49:15] Level removido por: mr_cristhian, level removido de mr_cristhian, levels: 26
+[2025-09-13 13:51:47] Level adicionado por: mr_cristhian, para mr_cristhian, levels: 17
+[2025-09-13 13:51:55] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 2000
+[2025-09-13 16:38:13] Level adicionado por: mr_cristhian, para mr_cristhian, levels: 7
+[2025-09-13 16:38:32] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 20140
+[2025-09-13 16:45:43] Level removido por: mr_cristhian, level removido de mr_cristhian, levels: 1
+[2025-09-13 16:51:35] Level removido por: mr_cristhian, level removido de mr_cristhian, levels: 1
+[2025-09-13 16:53:33] Level removido por: mr_cristhian, level removido de mr_cristhian, levels: 1
+[2025-09-13 16:54:11] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 22700
+[2025-09-13 16:55:12] Level removido por: mr_cristhian, level removido de mr_cristhian, levels: 1
+[2025-09-13 16:55:19] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 22700
+[2025-09-13 16:58:57] Level removido por: mr_cristhian, level removido de mr_cristhian, levels: 1
+[2025-09-13 16:59:28] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 22700
+[2025-09-13 17:02:05] Level removido por: mr_cristhian, level removido de mr_cristhian, levels: 1
+[2025-09-13 17:02:12] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 22800
+[2025-09-14 15:15:55] Level removido por: mr_cristhian, level removido de mr_cristhian, levels: 7
+[2025-09-14 15:16:02] XP adicionado por: mr_cristhian, XP adicionados a <@760217401215156224>, xp: 2000

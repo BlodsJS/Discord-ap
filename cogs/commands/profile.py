@@ -5,7 +5,7 @@ from discord import app_commands, Member
 import logging
 from typing import Union
 logger = logging.getLogger(__name__)
-logger.info("Profile carregado")
+
 
 class ProfileCommands(BaseCommands):
     

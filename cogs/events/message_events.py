@@ -6,7 +6,6 @@ import random
 import discord
 
 logger = logging.getLogger(__name__)
-logger.info("Message carregado")
 
 class MessageEvents(BaseEventCog):
      
@@ -15,7 +14,7 @@ class MessageEvents(BaseEventCog):
             if message.author.bot or not message.guild:
                 return
             if self.bot.user.mentioned_in(message):
-                texts = self.dbs_controler.load_mind("answers")
+                texts = self.dbs_controller.load_mind("answers")
                 msg = random.choice(texts)
                 await message.reply(msg)
             
@@ -33,13 +32,26 @@ class MessageEvents(BaseEventCog):
                 return
             
             self.box +=1
-            taxa = await self.use.obter_taxa(self.processor.inicios, self.processor.fins, self.processor.valores, user_data["level"])
-            box_teste = await self.use.box_check(message.channel, user_data, self.box, self.db, taxa)
+            self.xp_box += user_data["level"]
             
-            if box_teste:
-                logger.info(f"Caixa funcionando {box_teste}")
-                
+            rate = self.level_controller.get_rate(user_data["level"])
+            #box_teste = await self.use.box_check(message.channel, user_data, self.box, self.db, rate)
+            box_handler = await self.giveawaycontroller.box_check(message.channel, user_data, self.box, self.xp_box)    
+            
+
+            if box_handler:
+                logger.info(box_handler)
+                if box_handler["levels_gained"] > 0:
+                    await self.db.increment_level(str(box_handler["interact"].user.id), box_handler["levels_gained"])
+                    try:
+                        role = await self.roles_controller.check_role(box_handler["new_level"], box_handler["interact"].user)
+                    except Exception as e:
+                        logger.info(e)
+                    
+                await self.db.set_field("xp", str(box_handler["interact"].user.id), box_handler["xp_remainder"])
                 self.box = 0
+                self.xp_box = 0
+            
             if self.cooldown_cache.get(user_id):
                 return
             if await self.use.has_role(message.author, 1347726055892455504):
@@ -48,20 +60,20 @@ class MessageEvents(BaseEventCog):
             try:
                 member = message.author
                 amplifier = await self.use.amplifier_role(message.author)
-                logger.info(f"amplificador: {amplifier}")
+                
                 xp_to_add = 20*amplifier
                 await self.db.increment_xp(user_id, xp_to_add)
-                
 
                 #Get user profile and levels
                 
                 user_data = await self.db.get_user_data(user_id)
-                taxa = await self.use.obter_taxa(self.processor.inicios, self.processor.fins, self.processor.valores, user_data["level"])
+                
                 money = random.randint(500, 1100)
                 await self.db.increment_money(user_id, money)
-                #await self.db.update_field(user_id,'money', money)
-                xp_need = await self.use.xp_calc(user_data["level"], taxa)
-                if user_data["xp"] >= xp_need:
+                teste_rate = self.level_controller.get_rate(user_data["level"])
+                xp_needed = self.level_controller.xp_required(user_data["level"], teste_rate)
+                
+                if user_data["xp"] >= xp_needed:
                     gains = await self.use.xp_button(user_data["xp"], user_data["level"])
                     sucess = await self.use.check_role(gains[2], member)
                     await self.db.increment_level(user_id, gains[0])
@@ -96,7 +108,7 @@ class MessageEvents(BaseEventCog):
        
             
             if member.id in self.users:
-                if new_level in [5, 10, 15, 20, 25, 30, 40, 50, 65, 70, 85, 100]:
+                if new_level in [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]:
                     embed = await self.use.create("👑 Ascensão Real", f"{self.users[member.id]} {member.mention}")
                     embed.add_field(
                         name="Novo patamar:",
@@ -105,7 +117,13 @@ class MessageEvents(BaseEventCog):
                     )
                     await channel.send(embed=embed)
                     return
-                  
+            msg_level = self.dbs_controller.load_messages()
+            user_roles = member.roles
+            for role in user_roles:
+                msg = msg_level.get(role.name)
+                if msg:
+                    await channel.send(f"{msg} {member.mention}")
+                return
             if str(new_level) in self.text.text_levels:
                 text = self.text.text_levels[str(new_level)]
                 msg = f"{text} {member.mention}"

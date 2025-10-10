@@ -1,5 +1,5 @@
 import discord
-from utils.handlers.dbs_handler import dbs_controler
+from utils.handlers.dbs_handler import dbs_controller
 from utils.handlers.roles_handler import roles_controller
 import json
 from pathlib import Path

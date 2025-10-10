@@ -1,16 +1,17 @@
 import json
 from pathlib import Path
 
-class dbs_controler:
+class dbs_controller:
     # Arquivos definidos como atributos de classe
     map_file = Path("utils/dbs/map.json")
     question_file = Path("utils/dbs/questons.json")
     users_tests_file = Path("utils/dbs/tests.json")
     all_configs_file = Path("utils/dbs/configs.json")
-    standart_banner_file = Path("utils/dbs/standard_banners.json")
+    standart_banner_file = Path("utils/dbs/standart_banners.json")
     profiles_file = Path("utils/dbs/users_profile.json")
     bei_mind_file = Path("utils/dbs/bei_mind.json")
     translater_file = Path("utils/dbs/translate.json")
+    message_level_file = Path("utils/dbs/message_level.json")
 
     # ----------------------
     # Métodos de leitura
@@ -33,109 +34,79 @@ class dbs_controler:
     # ---------------------
 
     @staticmethod
-    def load_users(field):
-        data = dbs_controler._load(dbs_controler.all_configs_file)
+    def load_users(field="users"):
+        data = dbs_controller._load(dbs_controller.all_configs_file)
         return data[field]
     
     @staticmethod
-    def load_roles(field):
-        data = dbs_controler._load(dbs_controler.all_configs_file)
+    def load_roles(field="roles"):
+        data = dbs_controller._load(dbs_controller.all_configs_file)
         return data[field]
     
     @staticmethod
-    def load_events(field):
-        data = dbs_controler._load(dbs_controler.all_configs_file)
+    def load_events(field="events"):
+        data = dbs_controller._load(dbs_controller.all_configs_file)
         return data[field]
     
     @staticmethod
-    def load_timers(field):
-        data = dbs_controler._load(dbs_controler.all_configs_file)
+    def load_timers(field="timers"):
+        data = dbs_controller._load(dbs_controller.all_configs_file)
         return data[field]
     
     @staticmethod
-    def load_house(field):
-        data = dbs_controler._load(dbs_controler.all_configs_file)
+    def load_house(field="houses"):
+        data = dbs_controller._load(dbs_controller.all_configs_file)
         return data[field]
 
     @staticmethod
-    def load_all_configs(field=None):
-        data = dbs_controler._load(dbs_controler.all_configs_file)
-        if field is None:
-            return data
-        return data.get(field)
+    def load_all_configs():
+        data = dbs_controller._load(dbs_controller.all_configs_file)
+        return data
 
     @staticmethod
     def load_map():
-        return dbs_controler._load(dbs_controler.map_file)
+        return dbs_controller._load(dbs_controller.map_file)
 
     @staticmethod
     def load_questions():
-        return dbs_controler._load(dbs_controler.question_file)
+        return dbs_controller._load(dbs_controller.question_file)
     
     @staticmethod
     def load_translater():
-        return dbs_controler._load(dbs_controler.translater_file)
+        return dbs_controller._load(dbs_controller.translater_file)
 
     @staticmethod
     def load_users_tests():
-        return dbs_controler._load(dbs_controler.users_tests_file)
+        return dbs_controller._load(dbs_controller.users_tests_file)
 
     @staticmethod
     def load_banners():
-        return dbs_controler._load(dbs_controler.standart_banner_file)
+        return dbs_controller._load(dbs_controller.standart_banner_file)
 
     @staticmethod
     def load_profiles():
-        return dbs_controler._load(dbs_controler.profiles_file)
+        return dbs_controller._load(dbs_controller.profiles_file)
+    @staticmethod
+    def load_messages():
+        return dbs_controller._load(dbs_controller.message_level_file)
     
     def load_mind(field):
-        data = dbs_controler._load(dbs_controler.bei_mind_file)
+        data = dbs_controller._load(dbs_controller.bei_mind_file)
         return data[field]
     # ----------------------
     # Métodos de escrita por sistemas
     # ----------------------
-    def deep_update(original: dict, updates: dict):
-        """Atualiza sub-dicionários recursivamente, preservando tudo que não é alterado"""
-        for key, value in updates.items():
-            if isinstance(value, dict) and key in original and isinstance(original[key], dict):
-                deep_update(original[key], value)
-            else:
-                original[key] = value
-    
-    def update_users(db: dict, updates: dict):
-        if "users" not in db:
-            db["users"] = {}
-        deep_update(db["users"], updates)
-
-    def update_roles(db: dict, updates: dict):
-        if "roles" not in db:
-            db["roles"] = {}
-        deep_update(db["roles"], updates)
-    
-    def update_events(db: dict, updates: dict):
-        if "events" not in db:
-            db["events"] = {}
-        deep_update(db["events"], updates)
-    
-    def update_timers(db: dict, updates: dict):
-        if "events" not in db:
-            db["events"] = {}
-        deep_update(db["events"], updates)
-    
-    def update_houses(db: dict, updates: dict):
-        if "events" not in db:
-            db["events"] = {}
-        deep_update(db["events"], updates)
-    
     
     @staticmethod
     def update_configs(updates: dict):
-        """Atualiza chaves em configs.json"""
-        data = dbs_controler._load(dbs_controler.all_configs_file)
+        
+        data = dbs_controller._load(dbs_controller.all_configs_file)
         data.update(updates)  # mescla os valores
-        dbs_controler._save(dbs_controler.all_configs_file, data)
+        dbs_controller._save(dbs_controller.all_configs_file, data)
 
     @staticmethod
-    def replace_profiles(new_profiles: list):
-        """Substitui completamente users_profile.json"""
-        dbs_controler._save(dbs_controler.profiles_file, new_profiles)
+    def update_profiles(updates):
+        
+        data = dbs_controller._load(dbs_controller.profiles_file)
+        data.update(updates)
+        dbs_controller._save(dbs_controller.profiles_file, data)

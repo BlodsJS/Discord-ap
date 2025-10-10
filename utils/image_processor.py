@@ -7,7 +7,7 @@ from typing import Optional, Tuple
 from discord import Member
 from PIL import Image, ImageDraw, ImageFont 
 from easy_pil import Editor, Canvas, Font, load_image_async
-from utils.handlers.dbs_handler import dbs_controler
+from utils.handlers.dbs_handler import dbs_controller
 import os
 import textwrap
 import bisect
@@ -16,7 +16,7 @@ import random
 from . import utilsPort
 
 logger = logging.getLogger(__name__)
-logger.info("Image carregado")
+
 
 class ImageProcessor(utilsPort):
 
@@ -99,7 +99,7 @@ class ImageProcessor(utilsPort):
     async def get_house(self, user: Member) -> str:
         if user.id in self.users:
             return self.users[user.id]
-        data_houses = dbs_controler.load_house("houses")
+        data_houses = dbs_controller.load_house("houses")
         role_names = [role.name for role in user.roles]
         for role in user.roles:
             house_role = data_houses.get(role.name)
@@ -115,7 +115,7 @@ class ImageProcessor(utilsPort):
             AVATAR_POS = (14, 14)
           
             taxa = await self.use.obter_taxa(self.inicios, self.fins, self.valores, level)
-            texts = dbs_controler.load_mind("thoughts")
+            texts = dbs_controller.load_mind("thoughts")
             
             words = self.text_break(random.choice(texts), 20)
             desc = await self._load_asset("desc", "teste", str(user.id))
@@ -229,7 +229,8 @@ class ImageProcessor(utilsPort):
             xp_needed = await self.use.xp_calc(user_data[2], taxa)
             logger.info(f"teoricamente xp necessário: {xp_needed}")
             if avatar: 
-                avatar = Editor(await load_image_async(avatar))
+                #avatar = Editor(await load_image_async(avatar))
+                avatar = Editor(avatar)
                 avatar.resize((80, 80)).circle_image()
                 bg.paste(avatar.image, (80, y + 10))
     
@@ -321,7 +322,8 @@ class ImageProcessor(utilsPort):
                 name = member.display_name
                 if member.display_name:
                     name = member.display_name
-                avatar = member.avatar.url
+                #avatar = member.avatar.url
+                avatar = await load_image_async(member.display_avatar.url)
                 await self._add_leaderboard_entry(bg, user_data, display_rank, visual_index, CARD_HEIGHT, taxa, name, avatar)
             
             return self._to_bytesio(bg.image, "leaderboard.png")

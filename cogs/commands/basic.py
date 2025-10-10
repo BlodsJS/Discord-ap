@@ -6,23 +6,44 @@ from typing import Union
 import logging
 from easy_pil import load_image_async, Editor
 import datetime
+import time
 
 logger = logging.getLogger(__name__)
-logger.info("Basic carregado")
+
 
 class BasicCommands(BaseCommands):
     @commands.command(name="testh")
-    async def test_handler_prefix(self, ctx, member: Member, role: Union[int, Role]):
+    async def test_handler_prefix(self, ctx):
+        logger.info("entrou no comando de teste")
         try:
-            if isinstance(role, int):
-                result = await self.roles_controller.has_role(member, role)
-                if result:
-                    embed = await self.use.create("teste de comando", f"{member.mention} tem o cargo {role}")
-                else:
-                    embed = await self.use.create("teste de comando", f"{member.mention} não tem o cargo {role}")
-                await ctx.send(embed=embed)
+            logger.info("iniciou a criação da imagem")
+            #banners = self.db_controler.load_banners()
+            file = self.top_image.create_image()
+            logger.info("terminou a criação da imagem")
+            await ctx.send(file=file)
         except Exception as e:
             logger.info(e)
+
+    @commands.command(name="badges", aliases=["bg"])
+    async def badges_prefix(self, ctx, member: Union[int, Member] = None):
+        
+        initial= time.perf_counter()
+        name_command = "badge"
+        if member:
+            if isinstance(member, int):
+                user_id = int(member)
+                member = await self.bot.fetch_user(user_id)
+        
+        user = member or ctx.author
+        try:
+            file = await self.badges_controller.badges_screen(user)
+        except Exception as e:
+            logger.info(f"Erro nas badges: {e}")
+        end = time.perf_counter()
+        logger.info(f"tempo total: {end - initial}")
+        await ctx.send(file=file)
+        
+            
 
     @commands.command(name="ping")
     async def ping_prefix(self, ctx):
@@ -42,7 +63,7 @@ class BasicCommands(BaseCommands):
         embed = await self.use.create("🏓 Pong!", f"{round(self.bot.latency* 1000)}ms")
         await ctx.send(embed=embed)
 
-    @commands.command(name="rep")
+    @commands.command(name="rep", aliases=["abençoar", "abencoar"])
     async def rep_prefix(self, ctx, user: Union[Member, int], *, message=None):
         name_command = "rep"
         if not user:
@@ -78,7 +99,7 @@ class BasicCommands(BaseCommands):
         await self.db.update_field(user_id, 'rep', new)
         if not message:
             message = f"{target.display_name} foi abençoado após uma oração de {ctx.author.display_name}. Bei Bei seja louvada!"
-        embed = await self.use.create("Reputação enviada com sucesso!", f"{ctx.author.mention} enviou uma rep a {user.mention}\nMensagem:\n> {message}")
+        embed = await self.use.create("A deusa Observou sua Oração", f"Oração de {ctx.author.mention} atendida , e a benção da deusa concedida a {user.mention}\nMensagem:\n> {message}")
         await ctx.send(embed=embed)
 
     @commands.command(name="ajuda", aliases=["help", "s", 'search'])

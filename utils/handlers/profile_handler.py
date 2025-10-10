@@ -1,6 +1,6 @@
 import random
 import json
-from handlers.dbs_handler import dbs_controler
+from handlers.dbs_handler import dbs_controller
 from pathlib import Path
 
 class ProfileHandler:
@@ -9,7 +9,7 @@ class ProfileHandler:
     def edit_profile(user_id: str, field: str, value: str):
         try:
             file_json = Path("utils/dbs/users_profile.json")
-            profiles = dbs_controler.load_profiles
+            profiles = dbs_controller.load_profiles
             if user_id not in profiles:
                 profiles[user_id] = {}
             

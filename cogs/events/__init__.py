@@ -6,19 +6,25 @@ from utils.useful_system import UsefulSystem
 from utils.image_processor import ImageProcessor
 from utils.channel_system import ChannelSystem
 from utils.help_text import TextSystem
-from utils.handlers.dbs_handler import dbs_controler
+from utils.handlers.dbs_handler import dbs_controller
 from utils.handlers.level_handler import LevelHandler
+from utils.views.giveaway_view import giveawaycontroller
+from utils.handlers.roles_handler import roles_controller
 
 class BaseEventCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.processor = ImageProcessor()
         self.db = DatabaseManager()
-        self.dbs_controler = dbs_controler
+        self.dbs_controller = dbs_controller
+        self.level_controller = LevelHandler
         self.level_sys = LevelSystem(self.db)
         self.use = UsefulSystem()
         self.c_db = ChannelSystem()
         self.text = TextSystem()
+        self.giveawaycontroller = giveawaycontroller
+        self.roles_controller = roles_controller
+        
         self.cooldown_cache = TTLCache(maxsize=1000, ttl=80)
         self.level_messages = {
 	     	5: "Você deixou de ser um zero... para se tornar um um. Não chore ainda — o abismo está só começando a sorrir para você.",
@@ -40,3 +46,4 @@ class BaseEventCog(commands.Cog):
         	738457395268681859: "Ymir" #ymir
         }
         self.box = 0
+        self.xp_box = 0

@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class LevelSystem:
     def __init__(self, db: DatabaseManager):
         self.db = db
-        logger.info("Level carregado")
+        
         self.level_messages = {
             5: "você deixou de ser um zero... para se tornar um um.",
             10: "você é como uma vela na tempestade...",

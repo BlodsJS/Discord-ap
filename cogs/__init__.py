@@ -17,32 +17,32 @@ async def setup(bot):
     #cogs
     bot.timer_controller = timer_controller
     await bot.add_cog(BasicCommands(bot)) #passo aqui o cmdTimer
-    logger.info("Comandos Basicos inicializados")
+    #logger.info("Comandos Basicos inicializados")
     
     await bot.add_cog(ProfileCommands(bot)) #passo aqui o cmdTimer
-    logger.info("Comandos Profile inicializados")
+    #logger.info("Comandos Profile inicializados")
     
     await bot.add_cog(AdminCommands(bot)) #passo aqui o cmdTimer
-    logger.info("Comandos Admin inicializados")
+    #logger.info("Comandos Admin inicializados")
 
     await bot.add_cog(EconomyCommands(bot))
 
     await bot.add_cog(HouseCommands(bot))
     
     await bot.add_cog(SystemEvents(bot))
-    logger.info("SystemEvents inicializado")
+    #logger.info("SystemEvents inicializado")
     
     await bot.add_cog(MessageEvents(bot))
-    logger.info("MessageEvents inicializado")
+    #logger.info("MessageEvents inicializado")
     
     await bot.add_cog(VoiceEvents(bot))
-    logger.info("VoiceEvents inicializado")
+    #logger.info("VoiceEvents inicializado")
     
     await bot.add_cog(BackgroundTasks(bot))
-    logger.info("Tasks System inicializado")
+    #logger.info("Tasks System inicializado")
 
     #teste de carregamento de cogs
-    #await bot.load_extension("cogs.commands.admin_commands")
+    await bot.load_extension("cogs.commands.admin_commands")
 
     #adiciono aqui o carregamento das tasks exatamente como os outros cogs
      #passo aqui o cmdTimer

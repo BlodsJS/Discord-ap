@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 class DatabaseManager:
     _instance = None
     _initialized = False
-    logger.info("Banco de dados carregado")
+    
     
     def __new__(cls, db_path: str = 'xp_data.db'):
         if cls._instance is None:
@@ -53,7 +53,8 @@ class DatabaseManager:
                 message INTEGER DEFAULT 0,
                 voice INTEGER DEFAULT 0,
                 money INTEGER DEFAULT 0,
-                rep INTEGER DEFAULT 0
+                rep INTEGER DEFAULT 0,
+                bank INTEGER DEFAULT 0
             )
         '''):
             await self.connection.commit()
@@ -77,7 +78,7 @@ class DatabaseManager:
         await self.connect()
 
         async with self.connection.execute(
-            "SELECT xp, level, message, voice, money, rep FROM xp_data WHERE user_id = ?",
+            "SELECT xp, level, message, voice, money, rep, bank FROM xp_data WHERE user_id = ?",
             (user_id,)
         ) as cursor:
 
@@ -89,13 +90,14 @@ class DatabaseManager:
                     "message": row[2],
                     "voice": row[3],
                     "money": row[4],
-                    "rep": row[5]
+                    "rep": row[5],
+                    "bank": row[6]
                 }
                 return user_data
             
             async with self.connection.execute(
-                    "INSERT INTO xp_data (user_id, xp, level, message, voice, money, rep) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (user_id, 0, 1, 0, 0, 0, 0)
+                    "INSERT INTO xp_data (user_id, xp, level, message, voice, money, rep, bank) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                    (user_id, 0, 1, 0, 0, 0, 0, 0)
             ) as cursor:
 
                 await self.connection.commit()
@@ -105,7 +107,8 @@ class DatabaseManager:
                     "message": 0,
                     "voice": 0,
                     "money": 0,
-                    "rep": 0
+                    "rep": 0,
+                    "bank": 0
                 }
 
   # ************************** FIELDS UPDATE **************************
@@ -149,7 +152,37 @@ class DatabaseManager:
         except Exception as e:
             logger.error(f"Falha ao atualizar {field} para {user_id}: {e}")
             return False
+    
+    async def dep_money(self, user_id:str, value: any):
+        await self.connect()
+        query = f"""
+            UPDATE xp_data
+            SET money = money - ?,
+                bank = bank + ?
+            WHERE user_id = ?
+        """
+        try:
+            result = await self._execute_query(query, (value, value, user_id))
+            return True
+        except Exception as e:
+            logger.error(f"falha ao depositar o dinheiro de {user_id}")
+            return False
           
+    async def with_money(self, user_id:str, value: any):
+        await self.connect()
+        query = f"""
+            UPDATE xp_data
+            SET money = money + ?,
+                bank = bank - ?
+            WHERE user_id = ?
+        """
+        try:
+            result = await self._execute_query(query, (value, value, user_id))
+            return True
+        except Exception as e:
+            logger.error(f"falha ao sacar o dinheiro de {user_id}")
+            return False
+        
 # ************************** EVENT SYSTEM **************************
     """
     methods to add xp, level and messages to users,

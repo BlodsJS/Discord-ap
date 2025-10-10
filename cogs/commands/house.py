@@ -12,8 +12,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class HouseCommands(BaseCommands):
-    logger.info("House carregado")
-
+    
     @commands.command(name="houses", aliases=["casas", "casa"])
     async def house_prefix(self, ctx, text: str = ""):
         user = ctx.author

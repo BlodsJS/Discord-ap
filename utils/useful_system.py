@@ -3,7 +3,7 @@ import discord
 from typing import Dict, Tuple, Union
 from datetime import datetime, timedelta
 from discord import Member, TextChannel
-from utils.handlers.dbs_handler import dbs_controler
+from utils.handlers.dbs_handler import dbs_controller
 import bisect
 from datetime import datetime
 import pathlib
@@ -19,7 +19,7 @@ class UsefulSystem:
         self.cor = discord.Color.default()
         self.arquivo = pathlib.Path(arquivo)
         #locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
-        logger.info("Useful carregado")
+        
         self.taxa = {
 		    range(1, 26): 20,
 		    range(26, 51): 20,
@@ -195,12 +195,11 @@ class UsefulSystem:
 
     async def amplifier_role(self, member):
         
-        roles_to_check = dbs_controler.load_roles("roles")
-        for key in roles_to_check["amplifier"]:
+        roles_to_check = dbs_controller.load_roles("roles")
+        for key, value in roles_to_check["amplifier"].items():
             
-            if await self.has_role(member, key[0]):
-                amplifier = 1+key[1]
-                
+            if await self.has_role(member, value["role"]):
+                amplifier = 1+value["effect"]
                 return amplifier
         return 1
         

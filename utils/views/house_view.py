@@ -1,7 +1,7 @@
 # utils/views/house_view.py
 import discord
 from utils.handlers.house_handler import TestHandler
-from utils.handlers.dbs_handler import dbs_controler
+from utils.handlers.dbs_handler import dbs_controller
 from utils.handlers.roles_handler import roles_controller
 import json
 from pathlib import Path
@@ -118,7 +118,7 @@ class TestView(discord.ui.View):
         return results  # votos por casa
     
     async def verify_winners(self, results):
-        houses_data = dbs_controler.load_house("houses")  # pega todos os IDs do JSON
+        houses_data = dbs_controller.load_house("houses")  # pega todos os IDs do JSON
         max_votes = max(results.values())
         winners = [house for house, points in results.items() if points == max_votes]
         # sempre retorna uma lista de casas vencedoras e IDs correspondentes

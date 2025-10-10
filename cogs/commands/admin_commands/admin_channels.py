@@ -49,3 +49,55 @@ class admin_channel_commands(BaseCommands):
         else:
             embed = await self.use.create("Erro:", "não foi possível adicionar o canal")
             await ctx.send(embed=embed)
+    
+    @commands.command(name="removechannel", aliases=["rc"])
+    @commands.has_permissions(administrator=True)
+    async def remove_channel_prefix(self, ctx, canal: Union[TextChannel, VoiceChannel]):
+        if not isinstance(canal, (TextChannel, VoiceChannel)):
+            embed = await self.use.create("Erro:", f"{canal} não é um canal de voz ou texto vu00e1lido")
+            await ctx.send(embed=embed)
+            return
+        
+        if isinstance(canal, VoiceChannel):
+            canais = self.c_db.get_canais(ctx.guild.id, "voice")
+            if not canal.id in canais:
+                embed = await self.use.create("Erro:", "Esse canal não foi adicionado")
+                await ctx.send(embed=embed)
+                return
+            field = "voice"
+        
+        if isinstance(canal, TextChannel):
+            canais = self.c_db.get_canais(ctx.guild.id, "text")
+            if not canal.id in canais:
+                logger.info(ctx)
+                embed = await self.use.create("Erro:", "Esse canal não foi adicionado")
+                await ctx.send(embed=embed)
+                return
+            field = "text"
+
+        sucess = await self.c_db.apagar(ctx.guild.id, canal.id, field)
+        if sucess:
+            embed = await self.use.create("Sucesso", f"{canal} foi removido da lista")
+            # await self.use.arquivo(f"Canal {canal} removido com sucesso da lista por {ctx.name}")
+            await ctx.send(embed=embed)
+
+    @commands.command(name="channel", aliases=["canais", "ch"])
+    @commands.has_permissions(administrator=True)
+    async def channel_prefix(self, ctx):
+        canais = [f'<#{cid}>' for cid in self.c_db.get_canais(ctx.guild.id, "text")]
+        v_canais = [f'<#{cid}>' for cid in self.c_db.get_canais(ctx.guild.id, "voice")]
+        t_canais = [f'<#{cid}>' for cid in self.c_db.get_canais(ctx.guild.id, "thread")]
+        text = ""
+        voice =""
+        thread = ""
+        for i in canais:
+            text += f"{i}\n"
+            
+        for i in v_canais:
+            voice += f"{i}\n"
+
+        for i in t_canais:
+            thread+= f"{i}\n"
+        
+        embed = await self.use.create("Canais:", f"Canais de texto:\n{text}\n\nCanais de voz:\n{voice}\n\nTopicos:\n{thread}")
+        await ctx.send(embed=embed)

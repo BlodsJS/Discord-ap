@@ -5,10 +5,11 @@ from typing import Union
 from discord.ext import commands
 from discord import app_commands, Member, TextChannel, VoiceChannel
 from utils.views.config_view import ConfigView
-from utils.handlers.dbs_handler import dbs_controler
+from utils.handlers.dbs_handler import dbs_controller
 import re
 import logging
 
+bkz = "<:BKZ_Coin:1379630938232721568>"
 class admin_economy_commands(BaseCommands):
     
     @commands.command(name="addmoney", aliases=["add money"])

@@ -9,13 +9,11 @@ import json
 import asyncio
 
 logger = logging.getLogger(__name__)
-logger.info("Channel carregado")
-
 
 class ChannelSystem:
     def __init__(self, arquivo: str = 'canais.json'):
         self.arquivo = pathlib.Path(arquivo)
-        print(self.arquivo)
+        
         self.dados: Dict[str, Dict[str, List[int]]] = {}  # Estrutura correta
         asyncio.create_task(self._carregar_dados())
 

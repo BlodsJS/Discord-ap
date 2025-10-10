@@ -11,7 +11,7 @@ class SystemEvents(BaseEventCog):
     @commands.Cog.listener()
     async def on_ready(self):
     	#await self.c_db.create()
-    	print(self.c_db.dados)
+    	#print(self.c_db.dados)
     	await self.repo_movs.start()
     
     @commands.Cog.listener()
@@ -34,7 +34,7 @@ class SystemEvents(BaseEventCog):
         
         if member.bot:
             return
-        data = self.dbs_controler.load_events("events")
+        data = self.dbs_controller.load_events("events")
         msg_template = " ".join(data["member_join"]["msg"])
         msg = f"{member.mention} | {msg_template}"
         
