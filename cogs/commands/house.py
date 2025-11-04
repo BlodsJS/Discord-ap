@@ -48,7 +48,7 @@ class HouseCommands(BaseCommands):
     async def teste_house_prefix(self, ctx, *, text: str = ""):
         user = ctx.author
         async def button_response(interact: discord.Interaction):
-            houses = self.db_controler.load_house("houses")
+            houses = self.dbs_controler.load_house("houses")
             member = interact.guild.get_member(interact.user.id)
             for key, value in houses.items():
                 if await self.use.has_role(member, value):
